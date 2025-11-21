@@ -193,8 +193,6 @@ def plot_smoothing_comparison(rtts: np.ndarray,
     
     plt.tight_layout()
     plt.savefig('smoothing_comparison.png', dpi=150, bbox_inches='tight')
-    print("\nSmoothing comparison saved as 'smoothing_comparison.png'")
-    plt.show()
 
 
 def segment_trace(rtts: np.ndarray, 
@@ -326,5 +324,3 @@ def plot_segmentation(rtts: np.ndarray,
     
     plt.tight_layout()
     plt.savefig('tcp_segmentation.png', dpi=150, bbox_inches='tight')
-    print("\nSegmentation plot saved as 'tcp_segmentation.png'")
-    plt.show()

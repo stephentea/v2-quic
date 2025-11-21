@@ -1,6 +1,7 @@
 import pathlib
 from typing import Optional, TextIO
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Import the parser
 import sys
@@ -9,6 +10,7 @@ from pipeline.parse_params import parse_params
 from clients.run_clients import run_experiment
 from analysis.ack_analysis import analyze_pcap, analyze_qlog
 from analysis.ttlb_analysis import analyze_ttlb
+from analysis.cda_analysis import segment_trace
 
 
 def main():
@@ -33,12 +35,14 @@ def main():
                     y.append(cumack)
                 print(x)
                 print(y)
-                plt.scatter(x, y)
+                plt.plot(x, y)
                 plt.xlabel('Time (ms)')
                 plt.ylabel('Cumulative ACK')
                 plt.title(f'{client.name} - {client_output}')
                 plt.savefig(f'{client.name}.png')  # Save instead of show
                 plt.close()
+
+                segment_trace(np.array(x), np.array(y))
         
         # Analyze TTLB
         single_ttlb_res, pairwise_ttlb_res = analyze_ttlb(analysis)

@@ -13,8 +13,8 @@
     {
       "name": "meta_h3_50mbps",
       "endpoint": "https://scontent.xx.fbcdn.net/speedtest-5MB",
-      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
-      "iterations": 5,
+      "clients": ["curl_h2"],
+      "iterations": 1,
       "profile": {
         "loss": 1.0,
         "delay": 10,
