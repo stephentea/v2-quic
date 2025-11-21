@@ -200,7 +200,7 @@ def analyze_pcap(filename: str) -> tuple[dict, str]:
         'rx_packets_ts': rx_packets_ts,
         'lost_packets': lost_packets,
         'ttlb': ttlb
-    }, filename
+    }
 
 
 def analyze_qlog(filename: str) -> tuple[dict, str]:
@@ -216,17 +216,58 @@ def analyze_qlog(filename: str) -> tuple[dict, str]:
     first_client_packet_time = None
     last_server_packet_time = None
 
-    with open(filename) as f:
-        data = json.load(f)
-        traces = data['traces'][0]
-        events = traces['events']
-        if 'configuration' in traces:
-            time_units = traces['configuration']['time_units']
+    with open(filename, 'rb') as f:
+        RS = b'\x1e'
+        lines = f.read().split(RS)
+        
+        if not lines:
+            raise ValueError(f"Empty file: {filename}")
+        
+        # Parse first line (metadata)
+        first_obj = json.loads(lines[1].strip())
+        
+        # Check if this is JSON-SEQ format (ngtcp2 sqlog)
+        if 'qlog_format' in first_obj and first_obj.get('qlog_format') == 'JSON-SEQ':
+            # Get time format from metadata
+            trace_info = first_obj.get('trace', {})
+            common_fields = trace_info.get('common_fields', {})
+            time_units = 'ms'  # JSON-SEQ uses milliseconds
+            
+            # Parse events from remaining lines
+            events = []
+            for line in lines[1:]:
+                line = line.strip()
+                if not line:
+                    continue
+                
+                event_obj = json.loads(line)
+                
+                # Convert to qlog array format: [time, category, event_type, data]
+                time_val = event_obj.get('time', 0)
+                name = event_obj.get('name', '')
+                data = event_obj.get('data', {})
+                
+                # Split name into category and event_type
+                if ':' in name:
+                    category, event_type = name.split(':', 1)
+                else:
+                    category = ''
+                    event_type = name
+                
+                events.append([time_val, category, event_type, data])
+        
         else:
-            time_units = 'ms'
+            # Standard qlog format - single JSON object
+            data = json.loads(lines[0]) if len(lines) == 1 else json.load(open(filename))
+            traces = data['traces'][0]
+            events = traces['events']
+            if 'configuration' in traces:
+                time_units = traces['configuration']['time_units']
+            else:
+                time_units = 'ms'
 
         first_time = None
-
+        global_max_ack = None
         prev_pkt = {'pn': 0, 'dl': 0}
         loss_count = 0
 
@@ -261,7 +302,7 @@ def analyze_qlog(filename: str) -> tuple[dict, str]:
 
                 for frame in frames:
                     if frame['frame_type'].lower() == 'stream':
-                        if frame['stream_id'] != '0':
+                        if frame['stream_id'] != 0:
                             continue
 
                         pkt_num = int(event_data['header']['packet_number'])
@@ -298,8 +339,9 @@ def analyze_qlog(filename: str) -> tuple[dict, str]:
                 if 'frames' not in event_data:
                     continue
 
-                local_max_ack = None
-                packet_type = event_data['packet_type']
+                packet_type = event_data.get('packet_type')
+                if packet_type is None:
+                    packet_type = event_data['header']['packet_type']
                 frames = event_data['frames']
 
                 for frame in frames:
@@ -321,17 +363,17 @@ def analyze_qlog(filename: str) -> tuple[dict, str]:
                             if i not in pkts_received:
                                 continue
 
-                            if local_max_ack is None:
-                                local_max_ack = pkts_received[i]
+                            if global_max_ack is None:
+                                global_max_ack = pkts_received[i]
 
-                            local_max_ack = max(
-                                local_max_ack, pkts_received[i])
+                            global_max_ack = max(
+                                global_max_ack, pkts_received[i])
 
                 if packet_type != '1RTT':
                     ack_packets_ts.append((ts, 0))
-                if local_max_ack is not None:
-                    ack_ts[ts] = local_max_ack
-                    ack_packets_ts.append((ts, local_max_ack))
+                if global_max_ack is not None:
+                    ack_ts[ts] = global_max_ack
+                    ack_packets_ts.append((ts, global_max_ack))
 
     # Calculate TTLB
     ttlb = None
@@ -346,4 +388,4 @@ def analyze_qlog(filename: str) -> tuple[dict, str]:
         'max_stream_data': max_stream_data,
         'lost_packets': lost_packets,
         'ttlb': ttlb
-    }, filename
+    }

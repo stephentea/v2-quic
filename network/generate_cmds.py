@@ -17,7 +17,7 @@ from pipeline.parse_params import NetworkProfile
 
 # Constants
 ROOT_TRAFFIC_RATE_LIMIT = 10000000.0  # 10 Gbps in Kbit
-DEFAULT_INTERFACE = 'eth0'
+DEFAULT_INTERFACE = 'enp0s3'
 IFB_INTERFACE = 'ifb0'
 HTB_HANDLE = '1a64:'
 NETEM_HANDLE = '2054:'

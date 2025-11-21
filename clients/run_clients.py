@@ -81,7 +81,7 @@ def prepare_environment() -> dict:
     return env
 
 
-def record_pcap(url_host: str, interface: str = 'en0') -> subprocess.Popen:
+def record_pcap(url_host: str, interface: str = 'enp0s3') -> subprocess.Popen:
     """Start capturing packets with tshark for H2 clients."""
     pcap_file = TMP_PCAP / 'out.pcapng'
     
@@ -104,7 +104,7 @@ def record_pcap(url_host: str, interface: str = 'en0') -> subprocess.Popen:
         raise RuntimeError("tshark not found. Please install wireshark/tshark.")
 
 
-def parse_pcap_to_json(client: str, iteration: int, output_dir: pathlib.Path) -> None:
+def parse_pcap_to_json(client: str, iteration: int, output_dir: pathlib.Path) -> str:
     """Convert pcap file to JSON format using tshark and save to output directory."""
     pcap_file = TMP_PCAP / 'out.pcapng'
     json_file = output_dir / f'{client}_{iteration}.json'
@@ -114,7 +114,7 @@ def parse_pcap_to_json(client: str, iteration: int, output_dir: pathlib.Path) ->
         '-r', str(pcap_file),
         '-T', 'json',
         '-o', f'tls.keylog_file: {SSL_KEY_LOG_FILE}',
-        '-j', 'Timestamps tcp tcp.flags http2 http2.stream'
+        '-J', 'tcp http2'
     ]
     
     try:
@@ -127,6 +127,8 @@ def parse_pcap_to_json(client: str, iteration: int, output_dir: pathlib.Path) ->
         # Save raw JSON output to preserve duplicate keys
         with open(json_file, 'w') as f:
             f.write(result.stdout.decode())
+
+        return json_file
     
     except subprocess.CalledProcessError as e:
         print(f"Error parsing pcap: {e.stderr.decode()}")
@@ -181,7 +183,7 @@ def build_client_command(client: Client, url: str, qlog_dir: Optional[pathlib.Pa
 
 def run_iteration(client: Client, url: str, iteration: int, 
                   qlog_output_dir: Optional[pathlib.Path] = None,
-                  pcap_output_dir: Optional[pathlib.Path] = None) -> None:
+                  pcap_output_dir: Optional[pathlib.Path] = None) -> str:
     """Run a single iteration of a client request."""
     url_host, url_port, url_path = parse_url(url)
     
@@ -199,34 +201,37 @@ def run_iteration(client: Client, url: str, iteration: int,
         
         # Build and run client command
         cmd = build_client_command(client, url, TMP_QLOG if client.is_h3 else None)
-        
         result = subprocess.run(
             cmd,
             capture_output=True,
             env=env
         )
-        
+
         # Stop packet capture for H2
         if pcap_process:
             time.sleep(PCAP_STOP_DELAY)
-            pcap_process.kill()
-            time.sleep(1)
+            pcap_process.terminate()
+            try:
+                pcap_process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                pcap_process.kill()
+                pcap_process.wait()
         
         # Save results
         if not client.is_h3:
             # Parse and save pcap as JSON (preserving duplicate keys for analyze_pcap)
             if pcap_output_dir:
-                parse_pcap_to_json(client.name, iteration, pcap_output_dir)
+                output_file = parse_pcap_to_json(client.name, iteration, pcap_output_dir)
         else:
             # Move qlog to output directory
-            qlog_files = list(TMP_QLOG.glob('*.qlog'))
+            qlog_files = list(TMP_QLOG.glob('*.sqlog'))
             if not qlog_files:
                 raise Exception('No qlog file created')
             
             qlog_file = qlog_files[0]
             
             if qlog_output_dir:
-                output_file = qlog_output_dir / f'{client.name}_{iteration}.qlog'
+                output_file = qlog_output_dir / f'{client.name}_{iteration}.sqlog'
                 shutil.move(str(qlog_file), str(output_file))
             
             remove_files(TMP_QLOG)
@@ -234,6 +239,9 @@ def run_iteration(client: Client, url: str, iteration: int,
         # Clean up SSL key log
         if SSL_KEY_LOG_FILE.exists():
             SSL_KEY_LOG_FILE.unlink()
+        
+        # Return output file name
+        return output_file
     
     except Exception as e:
         if pcap_process:
@@ -248,7 +256,8 @@ def run_experiment(experiment: Experiment, client_dict: dict[str, Client]) -> No
     print(f'Iterations: {experiment.iterations}')
     print(f'Clients: {", ".join(experiment.clients)}')
     
-    # Create output directories for this experiment
+    # Create output directories
+    make_dirs(DIRS)
     exp_qlog_dir = QLOG_DIR / experiment.name
     exp_pcap_dir = PCAP_DIR / experiment.name
     
@@ -268,12 +277,14 @@ def run_experiment(experiment: Experiment, client_dict: dict[str, Client]) -> No
             print(f'Warning: {cmd} failed with error: {result.stderr}')
     
     # Run each client
+    output_files = {}
     for client_name in experiment.clients:
         if client_name not in client_dict:
             print(f'Warning: Client {client_name} not found in configuration')
             continue
         
         client = client_dict[client_name]
+        output_files[client] = []
         print(f'\n--- Running client: {client_name} ---')
         
         # Create client-specific output directory
@@ -292,15 +303,15 @@ def run_experiment(experiment: Experiment, client_dict: dict[str, Client]) -> No
             
             while retries < max_retries:
                 try:
-                    run_iteration(
+                    output_file = run_iteration(
                         client, 
                         experiment.endpoint, 
                         i,
                         qlog_output_dir=client_output_dir if client.is_h3 else None,
                         pcap_output_dir=client_output_dir if not client.is_h3 else None
                     )
-                    
-                    print(f'✓')
+                    output_files[client].append(output_file)
+                    print(f'✓ created output file {output_file}')
                     break
                 
                 except Exception as e:
@@ -309,6 +320,7 @@ def run_experiment(experiment: Experiment, client_dict: dict[str, Client]) -> No
                         print(f'✗ Failed after {max_retries} retries: {e}')
                         raise
                     else:
-                        print(f'Retry {retries}/{max_retries}...', end=' ')
+                        print(f'Retry {retries}/{max_retries}... with error: {e}', end=' ')
         
         print(f'Completed {client_name}: {experiment.iterations} iterations')
+        return output_files

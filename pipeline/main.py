@@ -1,17 +1,39 @@
 import pathlib
 from typing import Optional, TextIO
+import matplotlib.pyplot as plt
 
 # Import the parser
 import sys
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent.absolute()))
 from pipeline.parse_params import parse_params
 from clients.run_clients import run_experiment
+from analysis.ack_analysis import analyze_pcap, analyze_qlog
 
 
 def main():
     # Run each experiment 
     (clients, experiments) = parse_params('params.json', )
     for experiment in experiments.values():
-        run_experiment(experiment, clients)
+        output_files = run_experiment(experiment, clients)
+        for (client, client_outputs) in output_files.items():
+            for client_output in client_outputs:
+                if client.is_h3:
+                    analysis_res = analyze_qlog(client_output)
+                else:
+                    analysis_res = analyze_pcap(client_output)
 
+                x = []
+                y = []
+                print(analysis_res['ttlb'])
+                for (ts, cumack) in analysis_res['ack_packets_ts']:
+                    x.append(ts)
+                    y.append(cumack)
+                print(x)
+                print(y)
+                plt.scatter(x, y)
+                plt.xlabel('Time (ms)')
+                plt.ylabel('Cumulative ACK')
+                plt.title(f'{client.name} - {client_output}')
+                plt.savefig('test.png')  # Save instead of show
+                plt.close() 
 main()

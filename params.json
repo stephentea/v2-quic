@@ -13,24 +13,10 @@
     {
       "name": "meta_h3_50mbps",
       "endpoint": "https://scontent.xx.fbcdn.net/speedtest-5MB",
-      "clients": ["ngtcp2_h3"],
-      "iterations": 10,
+      "clients": ["curl_h2"],
+      "iterations": 1,
       "profile": {
-        "loss": 0,
-        "delay": 10,
-        "bw": 50,
-        "jitter": 0,
-        "burst_ingress": 0,
-        "burst_egress": 0
-      }
-    },
-    {
-      "name": "goole_h3_50mbps",
-      "endpoint": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg",
-      "clients": ["ngtcp2_h3"],
-      "iterations": 10,
-      "profile": {
-        "loss": 0,
+        "loss": 0.0,
         "delay": 10,
         "bw": 50,
         "jitter": 0,
