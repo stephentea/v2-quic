@@ -29,10 +29,13 @@ def main():
                 analysis[client].append(analysis_res)
         
         # Analyze TTLB
-        ttlb_analysis = analyze_ttlb(analysis)
-        for (client, ttlb_result) in ttlb_analysis.items():
-            if ttlb_result is not None:
-                print(f'Client: {client.name}, Avg TTLB: {ttlb_result[0]} ms, Variance: {ttlb_result[1]}, StdDev: {ttlb_result[2]} ms')
+        single_ttlb_res, pairwise_ttlb_res = analyze_ttlb(analysis)
+        for (client, res) in single_ttlb_res.items():
+            if res is not None:
+                print(f'Client: {res.name}, Avg TTLB: {res[0]} ms, Variance: {res[1]}, StdDev: {res[2]} ms')
+        for (client, res) in pairwise_ttlb_res.items():
+            for (other_client, perc_diff) in res:
+                print(f'Client: {client} vs {other_client}, Percentage Diff in Avg TTLB: {perc_diff}')
 
                 # if ttlb is not None:
                 #     ttlb_sum += ttlb
