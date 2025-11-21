@@ -1,4 +1,4 @@
 sslkeylog.log
 tmp/*
 data/*
-*/__pycache__/*
+*.png
