@@ -201,6 +201,7 @@ def run_iteration(client: Client, url: str, iteration: int,
         
         # Build and run client command
         cmd = build_client_command(client, url, TMP_QLOG if client.is_h3 else None)
+        print(cmd)
         start_time = time.time()
         result = subprocess.run(
             cmd,
@@ -228,14 +229,20 @@ def run_iteration(client: Client, url: str, iteration: int,
                 output_file = parse_pcap_to_json(client.name, iteration, pcap_output_dir)
         else:
             # Move qlog to output directory
-            qlog_files = list(TMP_QLOG.glob('*.sqlog'))
+            if client.name == "ngtcp2_h3":
+                qlog_files = list(TMP_QLOG.glob('*.sqlog'))
+            elif client.name == "proxygen_h3":
+                qlog_files = list(TMP_QLOG.glob('*.qlog'))
             if not qlog_files:
                 raise Exception('No qlog file created')
             
             qlog_file = qlog_files[0]
             
             if qlog_output_dir:
-                output_file = qlog_output_dir / f'{client.name}_{iteration}.sqlog'
+                if client.name == "ngtcp2_h3":
+                    output_file = qlog_output_dir / f'{client.name}_{iteration}.sqlog'
+                elif client.name == "proxygen_h3":
+                    output_file = qlog_output_dir / f'{client.name}_{iteration}.qlog'
                 shutil.move(str(qlog_file), str(output_file))
             
             remove_files(TMP_QLOG)
