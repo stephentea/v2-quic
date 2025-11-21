@@ -1,0 +1,44 @@
+{
+  "clients": [
+    "ngtcp2_h3",
+    "proxygen_h3",
+    "curl_h2"
+  ],
+  "client-exec-paths": {
+    "ngtcp2_h3": "/home/stephenchien/ngtcp2/examples/wsslclient",
+    "proxygen_h3": "/home/stephenchien/proxygen/proxygen/_build/proxygen/httpserver/hq",
+    "curl_h2": "/usr/bin/curl"
+  },
+  "experiments": [
+    {
+      "name": "meta_h3_50mbps",
+      "endpoint": "https://scontent.xx.fbcdn.net/speedtest-5MB",
+      "clients": ["ngtcp2_h3"],
+      "iterations": 10,
+      "profile": {
+        "loss": 0,
+        "delay": 10,
+        "bw": 50,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "goole_h3_50mbps",
+      "endpoint": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg",
+      "clients": ["ngtcp2_h3"],
+      "iterations": 10,
+      "profile": {
+        "loss": 0,
+        "delay": 10,
+        "bw": 50,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    }
+  ],
+  "analysis": { },
+  "output-dir": "./results"
+}
