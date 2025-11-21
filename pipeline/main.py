@@ -16,11 +16,17 @@ def main():
     for experiment in experiments.values():
         output_files = run_experiment(experiment, clients)
         for (client, client_outputs) in output_files.items():
+            ttlb_sum = 0
+            ttlb_count = 0
             for client_output in client_outputs:
                 if client.is_h3:
                     analysis_res = analyze_qlog(client_output)
                 else:
                     analysis_res = analyze_pcap(client_output)
+                ttlb = analysis_res['ttlb']
+                if ttlb is not None:
+                    ttlb_sum += ttlb
+                    ttlb_count += 1
 
                 x = []
                 y = []
@@ -34,6 +40,9 @@ def main():
                 plt.xlabel('Time (ms)')
                 plt.ylabel('Cumulative ACK')
                 plt.title(f'{client.name} - {client_output}')
-                plt.savefig('test.png')  # Save instead of show
+                plt.savefig(f'{client.name}.png')  # Save instead of show
                 plt.close() 
+
+            ttlb_avg = ttlb_sum / ttlb_count
+            print(client.name, ttlb_avg)
 main()

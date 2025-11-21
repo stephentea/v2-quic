@@ -128,8 +128,9 @@ def analyze_pcap(filename: str) -> tuple[dict, str]:
                 rx_ts[time + delay] = bytes_seq
                 rx_packets_ts.append((time + delay, {'length': bytes_len}))
 
-                # Track last server packet time
-                last_server_packet_time = time + delay
+                # Track last server packet time (for data packets)
+                if (int(tcp['tcp.len'])) > 0:
+                    last_server_packet_time = time
 
                 if bytes_seq > prev_seq:
                     prev_seq = bytes_seq
@@ -192,6 +193,8 @@ def analyze_pcap(filename: str) -> tuple[dict, str]:
     ttlb = None
     if first_client_packet_time is not None and last_server_packet_time is not None:
         ttlb = last_server_packet_time - first_client_packet_time
+    print(ack_packets_ts[-1][0], ack_packets_ts[0][0])
+    ttlb = ack_packets_ts[-1][0] - ack_packets_ts[0][0]
 
     return {
         'ack_ts': ack_ts,
@@ -379,6 +382,8 @@ def analyze_qlog(filename: str) -> tuple[dict, str]:
     ttlb = None
     if first_client_packet_time is not None and last_server_packet_time is not None:
         ttlb = last_server_packet_time - first_client_packet_time
+    print(ack_packets_ts[-1][0], ack_packets_ts[0][0])
+    ttlb = ack_packets_ts[-1][0] - ack_packets_ts[0][0]
 
     return {
         'ack_ts': ack_ts,

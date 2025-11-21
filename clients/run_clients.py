@@ -201,11 +201,15 @@ def run_iteration(client: Client, url: str, iteration: int,
         
         # Build and run client command
         cmd = build_client_command(client, url, TMP_QLOG if client.is_h3 else None)
+        start_time = time.time()
         result = subprocess.run(
             cmd,
             capture_output=True,
             env=env
         )
+        end_time = time.time()
+        duration = end_time - start_time
+        print(f"    Client ran for {duration:.2f} seconds")
 
         # Stop packet capture for H2
         if pcap_process:
@@ -323,4 +327,4 @@ def run_experiment(experiment: Experiment, client_dict: dict[str, Client]) -> No
                         print(f'Retry {retries}/{max_retries}... with error: {e}', end=' ')
         
         print(f'Completed {client_name}: {experiment.iterations} iterations')
-        return output_files
+    return output_files
