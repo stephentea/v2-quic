@@ -15,10 +15,10 @@ import shutil
 from urllib.parse import urlparse
 from typing import Optional
 
-# Import the parser
+# Import other modules
 import sys
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent.absolute()))
-from pipeline.parse_params import parse_params, Client, Experiment, NetworkProfile
+from pipeline.parse_params import Client, Experiment
 from network.generate_cmds import generate_cmds
 
 # Directories
