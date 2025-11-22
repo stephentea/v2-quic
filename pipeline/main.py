@@ -9,7 +9,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).parent.parent.absolute()))
 from pipeline.parse_params import parse_params
 from clients.run_clients import run_experiment
 from analysis.ack_analysis import analyze_pcap, analyze_qlog
-from analysis.ttlb_analysis import analyze_ttlb
+from analysis.ttlb_analysis import analyze_ttlb, plot_ttlb_heatmap, plot_ttlb_barchart
 from analysis.cda_analysis import segment_trace_pelt, plot_segmented_trace
 
 
@@ -39,10 +39,6 @@ def main():
         
         # Analyze TTLB
         single_ttlb_res, pairwise_ttlb_res = analyze_ttlb(analysis)
-        for (client, res) in single_ttlb_res.items():
-            if res is not None:
-                print(f'Client: {client}, Avg TTLB: {res[0]} ms, Variance: {res[1]}, StdDev: {res[2]} ms')
-        for (client, res) in pairwise_ttlb_res.items():
-            for (other_client, perc_diff) in res:
-                print(f'Client: {client} vs {other_client}, Percentage Diff in Avg TTLB: {perc_diff}')
+        plot_ttlb_barchart(single_ttlb_res, filename=f'ttlb-barchart-{client.name}')
+        plot_ttlb_heatmap(pairwise_ttlb_res, filename=f'ttlb-heatmap-{client.name}')
 main()

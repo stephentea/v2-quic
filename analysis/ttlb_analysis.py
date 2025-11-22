@@ -72,8 +72,8 @@ def plot_ttlb_heatmap(pairwise_results: Dict[str, List[Tuple]],
                 linewidths=0.5, linecolor='white', ax=ax)
     
     # Labels and title
-    ax.set_xlabel('Client (Reference)', fontsize=12)
-    ax.set_ylabel('Client (Baseline)', fontsize=12)
+    ax.set_xlabel('Client (Baseline)', fontsize=12)
+    ax.set_ylabel('Client (Reference)', fontsize=12)
     ax.set_title(title, fontsize=14, pad=20)
     
     plt.tight_layout()
@@ -94,11 +94,11 @@ Args:
 Returns:
     matplotlib Figure object
 """
-def plot_ttlb_bar_chart(single_results: Dict[str, Tuple],
-                        filename: str = 'ttlb_barchart.png',
-                        title: str = 'TTLB by Client',
-                        error_type: str = 'stddev',
-                        sort_by: str = None):
+def plot_ttlb_barchart(single_results: Dict[str, Tuple],
+                       filename: str = 'ttlb_barchart.png',
+                       title: str = 'TTLB by Client',
+                       error_type: str = 'stddev',
+                       sort_by: str = None):
     
     # Filter out None values
     valid_clients = {k: v for k, v in single_results.items() if v is not None}
@@ -162,20 +162,15 @@ def plot_ttlb_bar_chart(single_results: Dict[str, Tuple],
     ax.set_axisbelow(True)
     
     # Add value labels on top of bars
-    for i, (bar, avg, std) in enumerate(zip(bars, avg_values, std_values)):
+    for i, (bar, avg, err) in enumerate(zip(bars, avg_values, yerr)):
         height = bar.get_height()
-        ax.text(bar.get_x() + bar.get_width()/2., height + std,
-                f'{avg:.2f}',
+        ax.text(bar.get_x() + bar.get_width()/2., height + err + 3,
+                f'{avg:.2f} ± {err:.2f}',
                 ha='center', va='bottom', fontsize=9, fontweight='bold')
     
-    # Add legend
-    ax.legend(loc='upper right', framealpha=0.9)
-    
     # Add statistics text box
-    stats_text = f'Total Clients: {len(client_names)}\n'
-    stats_text += f'Min TTLB: {min(avg_values):.2f}\n'
+    stats_text = f'Min TTLB: {min(avg_values):.2f}\n'
     stats_text += f'Max TTLB: {max(avg_values):.2f}\n'
-    stats_text += f'Mean TTLB: {np.mean(avg_values):.2f}'
     
     props = dict(boxstyle='round', facecolor='wheat', alpha=0.8)
     ax.text(0.02, 0.98, stats_text, transform=ax.transAxes, 
