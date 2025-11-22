@@ -1,12 +1,5 @@
 import pathlib
 from typing import List, Tuple, Dict
-
-import sys
-sys.path.insert(0, str(pathlib.Path(__file__).parent.parent.absolute()))
-from analysis.cda_analysis import Segment
-
-import pathlib
-from typing import List, Tuple, Dict
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -132,3 +125,163 @@ def segment_analysis(segments1: List[List[Segment]], segments2: List[List[Segmen
             'client2_bytes': client2_bytes,
         }
     }
+
+"""
+Find the first segment where duration or average rate differs by more than the threshold.
+
+Args:
+    comparison_results: Dictionary returned by segment_analysis()
+    duration_threshold: Percentage threshold for duration difference (default 5%)
+    rate_threshold: Percentage threshold for rate difference (default 5%)
+
+Returns:
+    Dictionary with information about the first significant difference, or None if no difference found
+"""
+def find_first_significant_difference(comparison_results: Dict, 
+                                     duration_threshold: float = 5.0,
+                                     rate_threshold: float = 5.0) -> Dict:
+    
+    segment_stats = comparison_results['segment_stats']
+    
+    for stats in segment_stats:
+        duration_diff = abs(stats['pct_diff_duration'])
+        rate_diff = abs(stats['pct_diff_rate'])
+        
+        if duration_diff > duration_threshold or rate_diff > rate_threshold:
+            return {
+                'segment_id': stats['segment_id'],
+                'duration_pct_diff': stats['pct_diff_duration'],
+                'rate_pct_diff': stats['pct_diff_rate'],
+                'bytes_pct_diff': stats['pct_diff_bytes'],
+                'exceeds_duration_threshold': duration_diff > duration_threshold,
+                'exceeds_rate_threshold': rate_diff > rate_threshold,
+                'client1_stats': stats['client1'],
+                'client2_stats': stats['client2']
+            }
+    
+    return None
+
+"""
+Visualize segment comparison between two clients.
+
+Args:
+    comparison_results: Dictionary returned by segment_analysis()
+    filename: Output filename for the plot
+"""
+def visualize_segment_comparison(comparison_results: Dict,
+                                 filename: str = "segment_comparison.png"):
+    
+    summary = comparison_results['summary']
+    segment_stats = comparison_results['segment_stats']
+    
+    client1_name = summary['client1_name']
+    client2_name = summary['client2_name']
+    
+    # Extract data for plotting
+    segment_ids = [s['segment_id'] for s in segment_stats]
+    
+    # Client 1 data
+    c1_durations = [s['client1']['avg_duration'] for s in segment_stats]
+    c1_duration_stds = [s['client1']['std_duration'] for s in segment_stats]
+    c1_rates = [s['client1']['avg_rate_mean'] for s in segment_stats]
+    c1_rate_stds = [s['client1']['std_rate_mean'] for s in segment_stats]
+    c1_bytes = [s['client1']['avg_bytes'] for s in segment_stats]
+    c1_byte_stds = [s['client1']['std_bytes'] for s in segment_stats]
+    
+    # Client 2 data
+    c2_durations = [s['client2']['avg_duration'] for s in segment_stats]
+    c2_duration_stds = [s['client2']['std_duration'] for s in segment_stats]
+    c2_rates = [s['client2']['avg_rate_mean'] for s in segment_stats]
+    c2_rate_stds = [s['client2']['std_rate_mean'] for s in segment_stats]
+    c2_bytes = [s['client2']['avg_bytes'] for s in segment_stats]
+    c2_byte_stds = [s['client2']['std_bytes'] for s in segment_stats]
+    
+    # Percentage differences
+    pct_diff_duration = [s['pct_diff_duration'] for s in segment_stats]
+    pct_diff_rate = [s['pct_diff_rate'] for s in segment_stats]
+    pct_diff_bytes = [s['pct_diff_bytes'] for s in segment_stats]
+    
+    # Create figure with subplots
+    fig, axes = plt.subplots(3, 2, figsize=(16, 10))
+    fig.suptitle(f'Segment Comparison: {client1_name} vs {client2_name}', 
+                 fontsize=16, fontweight='bold')
+    
+    # Plot 1: Duration comparison
+    ax1 = axes[0, 0]
+    ax1.errorbar(segment_ids, c1_durations, yerr=c1_duration_stds, 
+                 marker='o', label=client1_name, capsize=5, linewidth=2)
+    ax1.errorbar(segment_ids, c2_durations, yerr=c2_duration_stds, 
+                 marker='s', label=client2_name, capsize=5, linewidth=2)
+    ax1.set_xlabel('Segment ID')
+    ax1.set_ylabel('Duration (ms)')
+    ax1.set_title('Segment Duration Comparison')
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+    
+    # Plot 2: Duration percentage difference
+    ax2 = axes[0, 1]
+    colors = ['green' if abs(d) <= 5 else 'red' for d in pct_diff_duration]
+    ax2.bar(segment_ids, pct_diff_duration, color=colors, alpha=0.7)
+    ax2.axhline(y=5, color='red', linestyle='--', linewidth=1, label='±5% threshold')
+    ax2.axhline(y=-5, color='red', linestyle='--', linewidth=1)
+    ax2.axhline(y=0, color='black', linestyle='-', linewidth=0.5)
+    ax2.set_xlabel('Segment ID')
+    ax2.set_ylabel('% Difference')
+    ax2.set_title(f'Duration % Diff ({client2_name} vs {client1_name})')
+    ax2.legend()
+    ax2.grid(True, alpha=0.3)
+    
+    # Plot 3: Rate comparison
+    ax3 = axes[1, 0]
+    ax3.errorbar(segment_ids, c1_rates, yerr=c1_rate_stds, 
+                 marker='o', label=client1_name, capsize=5, linewidth=2)
+    ax3.errorbar(segment_ids, c2_rates, yerr=c2_rate_stds, 
+                 marker='s', label=client2_name, capsize=5, linewidth=2)
+    ax3.set_xlabel('Segment ID')
+    ax3.set_ylabel('Average Rate (bytes/ms)')
+    ax3.set_title('Segment Rate Comparison')
+    ax3.legend()
+    ax3.grid(True, alpha=0.3)
+    
+    # Plot 4: Rate percentage difference
+    ax4 = axes[1, 1]
+    colors = ['green' if abs(r) <= 5 else 'red' for r in pct_diff_rate]
+    ax4.bar(segment_ids, pct_diff_rate, color=colors, alpha=0.7)
+    ax4.axhline(y=5, color='red', linestyle='--', linewidth=1, label='±5% threshold')
+    ax4.axhline(y=-5, color='red', linestyle='--', linewidth=1)
+    ax4.axhline(y=0, color='black', linestyle='-', linewidth=0.5)
+    ax4.set_xlabel('Segment ID')
+    ax4.set_ylabel('% Difference')
+    ax4.set_title(f'Rate % Diff ({client2_name} vs {client1_name})')
+    ax4.legend()
+    ax4.grid(True, alpha=0.3)
+    
+    # Plot 5: Bytes transferred comparison
+    ax5 = axes[2, 0]
+    ax5.errorbar(segment_ids, c1_bytes, yerr=c1_byte_stds, 
+                 marker='o', label=client1_name, capsize=5, linewidth=2)
+    ax5.errorbar(segment_ids, c2_bytes, yerr=c2_byte_stds, 
+                 marker='s', label=client2_name, capsize=5, linewidth=2)
+    ax5.set_xlabel('Segment ID')
+    ax5.set_ylabel('Bytes Transferred')
+    ax5.set_title('Bytes Transferred Comparison')
+    ax5.legend()
+    ax5.grid(True, alpha=0.3)
+    
+    # Plot 6: Bytes percentage difference
+    ax6 = axes[2, 1]
+    colors = ['green' if abs(b) <= 5 else 'red' for b in pct_diff_bytes]
+    ax6.bar(segment_ids, pct_diff_bytes, color=colors, alpha=0.7)
+    ax6.axhline(y=5, color='red', linestyle='--', linewidth=1, label='±5% threshold')
+    ax6.axhline(y=-5, color='red', linestyle='--', linewidth=1)
+    ax6.axhline(y=0, color='black', linestyle='-', linewidth=0.5)
+    ax6.set_xlabel('Segment ID')
+    ax6.set_ylabel('% Difference')
+    ax6.set_title(f'Bytes % Diff ({client2_name} vs {client1_name})')
+    ax6.legend()
+    ax6.grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    plt.savefig(filename, dpi=300, bbox_inches='tight')
+    plt.close()
+    print(f"Visualization saved to {filename}")
