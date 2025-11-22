@@ -208,7 +208,7 @@ def plot_segmented_trace(rtts: np.ndarray,
                         cumulative_bytes: np.ndarray,
                         segments: List[Segment],
                         filename: str = "trace_segmentation.png",
-                        title: str = "TCP Trace Segmentation",
+                        title: str = "Network Trace Segmentation",
                         figsize: Tuple[int, int] = (14, 8)):
     
     _, (ax1, ax2) = plt.subplots(2, 1, figsize=figsize, sharex=True)

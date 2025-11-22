@@ -10,7 +10,7 @@ from pipeline.parse_params import parse_params
 from clients.run_clients import run_experiment
 from analysis.ack_analysis import analyze_pcap, analyze_qlog
 from analysis.ttlb_analysis import analyze_ttlb
-from analysis.cda_analysis import segment_trace
+from analysis.cda_analysis import segment_trace_pelt, plot_segmented_trace
 
 
 def main():
@@ -33,16 +33,9 @@ def main():
                 for (ts, cumack) in analysis_res['ack_packets_ts']:
                     x.append(ts)
                     y.append(cumack)
-                print(x)
-                print(y)
-                plt.plot(x, y)
-                plt.xlabel('Time (ms)')
-                plt.ylabel('Cumulative ACK')
-                plt.title(f'{client.name} - {client_output}')
-                plt.savefig(f'{client.name}.png')  # Save instead of show
-                plt.close()
-
-                segment_trace(np.array(x), np.array(y))
+                x, y = np.array(x), np.array(y)
+                segments = segment_trace_pelt(x, y)
+                plot_segmented_trace(x, y, segments, filename=f'{client.name}')
         
         # Analyze TTLB
         single_ttlb_res, pairwise_ttlb_res = analyze_ttlb(analysis)
