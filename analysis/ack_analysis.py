@@ -1,5 +1,7 @@
 """
-analyze_pcap() parses pcap and returns """
+analyze_pcap() parses pcap and returns cumulative ACKs and RTTs.
+analyze_qlog() parses qlog/sqlog and returns cumulative ACKs and RTTs.
+"""
 
 import json
 from collections import OrderedDict
