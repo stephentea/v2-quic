@@ -194,20 +194,24 @@ def visualize_segment_comparison(comparison_results: Dict,
     
     # Helper function to plot with conditional styling
     def plot_with_style(ax, x_data, y_data, is_common, label, color, marker):
-        # Plot common segments with solid line and bold
+        # First, plot a dotted line connecting all segments to ensure continuity
+        ax.plot(x_data, y_data, color=color, linewidth=1, linestyle=':', alpha=0.4)
+        
+        # Then plot common segments with solid line and bold markers
         common_x = [x for x, c in zip(x_data, is_common) if c]
         common_y = [y for y, c in zip(y_data, is_common) if c]
         if common_x:
             ax.plot(common_x, common_y, marker=marker, color=color, 
-                   linewidth=3, linestyle='-', label=f'{label} (common)', markersize=8)
+                   linewidth=3, linestyle='-', label=f'{label} (common)', 
+                   markersize=8, markeredgewidth=2)
         
-        # Plot non-common segments with dotted line
+        # Plot non-common segments with markers only (line already drawn)
         uncommon_x = [x for x, c in zip(x_data, is_common) if not c]
         uncommon_y = [y for y, c in zip(y_data, is_common) if not c]
         if uncommon_x:
             ax.plot(uncommon_x, uncommon_y, marker=marker, color=color, 
-                   linewidth=2, linestyle=':', label=f'{label} (not common)', 
-                   markersize=6, alpha=0.7)
+                   linewidth=0, linestyle='', label=f'{label} (not common)', 
+                   markersize=6, alpha=0.7, markeredgewidth=1.5)
     
     # Plot 1: Duration comparison
     ax1 = axes[0, 0]
