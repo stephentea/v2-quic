@@ -22,7 +22,7 @@
       "iterations": 3,
       "interface": "enp0s3",  
       "profile": {
-        "loss": 0.0,
+        "loss": 0.1,
         "delay": 10,
         "bw": 50,
         "jitter": 25,

@@ -42,7 +42,6 @@ def main():
 
                 segments = segment_trace_pelt(x, y)
                 curr_segments.append(segments)
-                plot_segmented_trace(x, y, segments, filename=f'{experiment.name}-{trace.name}-{iteration}')
                 iteration += 1
             
             all_segments.append((trace.name, curr_segments))
