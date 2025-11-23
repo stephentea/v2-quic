@@ -5,6 +5,7 @@ analyze_qlog() parses qlog/sqlog and returns cumulative ACKs and RTTs.
 
 import json
 from collections import OrderedDict
+import pathlib
 
 def make_unique(key, dct):
     counter = 0
@@ -197,6 +198,12 @@ def analyze_pcap(filename: str) -> tuple[dict, str]:
         ttlb = last_server_packet_time - first_client_packet_time
     ttlb = ack_packets_ts[-1][0] - ack_packets_ts[0][0]
 
+    # Delete file after analysis to prevent excessive disk usage
+    try:
+        pathlib.Path(filename).unlink()
+    except Exception as e:
+        print(f"Warning: Failed to delete {filename}: {e}")
+
     return {
         'ack_ts': ack_ts,
         'ack_packets_ts': ack_packets_ts,
@@ -376,6 +383,12 @@ def analyze_qlog(filename: str) -> tuple[dict, str]:
         ttlb = last_server_packet_time - first_client_packet_time
     print(ack_packets_ts[-1][0], ack_packets_ts[0][0])
     ttlb = ack_packets_ts[-1][0] - ack_packets_ts[0][0]
+
+    # Delete file after analysis to prevent excessive disk usage
+    try:
+        pathlib.Path(filename).unlink()
+    except Exception as e:
+        print(f"Warning: Failed to delete {filename}: {e}")
 
     return {
         'ack_ts': ack_ts,

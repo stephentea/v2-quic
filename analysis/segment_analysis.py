@@ -94,6 +94,8 @@ def segment_analysis(segments1: List[List[Segment]], segments2: List[List[Segmen
         'client2_name': client2_name,
         'num_common_segments_client1': num_common_seg1,
         'num_common_segments_client2': num_common_seg2,
+        'avg_segments_client1': np.mean(seg1_lens),
+        'avg_segments_client2': np.mean(seg2_lens)
     }
     
     return {
@@ -171,6 +173,8 @@ def visualize_segment_comparison(comparison_results: Dict,
     
     client1_name = summary['client1_name']
     client2_name = summary['client2_name']
+    avg_seg1 = summary['avg_segments_client1']
+    avg_seg2 = summary['avg_segments_client2']
     
     # Extract data for plotting
     c1_segment_ids = [s['segment_id'] for s in client1_stats]
@@ -189,7 +193,7 @@ def visualize_segment_comparison(comparison_results: Dict,
     
     # Create figure with 4 subplots
     fig, axes = plt.subplots(2, 2, figsize=(16, 10))
-    fig.suptitle(f'Segment Comparison: {client1_name} vs {client2_name}', 
+    fig.suptitle(f'Segment Comparison: {client1_name} (avg: {avg_seg1:.1f} segs) vs {client2_name} (avg: {avg_seg2:.1f} segs)', 
                  fontsize=16, fontweight='bold')
     
     # Helper function to plot with conditional styling
@@ -212,6 +216,17 @@ def visualize_segment_comparison(comparison_results: Dict,
             ax.plot(uncommon_x, uncommon_y, marker=marker, color=color, 
                    linewidth=0, linestyle='', label=f'{label} (not common)', 
                    markersize=6, alpha=0.7, markeredgewidth=1.5)
+        
+        # Add data labels above each point
+        for x, y in zip(x_data, y_data):
+            ax.annotate(f'{y:.1f}', 
+                       xy=(x, y), 
+                       xytext=(0, 5), 
+                       textcoords='offset points',
+                       ha='center', 
+                       fontsize=8, 
+                       color=color,
+                       weight='bold')
     
     # Plot 1: Duration comparison
     ax1 = axes[0, 0]
