@@ -5,9 +5,9 @@ import matplotlib.pyplot as plt
 from typing import Tuple, Dict, List
 
 def analyze_ttlb(analysis) -> Tuple[Dict[str, Tuple], Dict[str, List[Tuple]]]:
-    # For each client, compute average, variance, and stddev of TTLB
+    # For each trace, compute average, variance, and stddev of TTLB
     single_results = {}
-    for client, analyses in analysis.items():
+    for trace, analyses in analysis.items():
         ttlb_values = []
         for analysis_res in analyses:
             if 'ttlb' in analysis_res and analysis_res['ttlb'] is not None:
@@ -16,26 +16,27 @@ def analyze_ttlb(analysis) -> Tuple[Dict[str, Tuple], Dict[str, List[Tuple]]]:
             avg_ttlb    = np.mean(ttlb_values)
             var_ttlb    = np.var(ttlb_values)
             stddev_ttlb = np.std(ttlb_values)
-            single_results[client.name] = (avg_ttlb, var_ttlb, stddev_ttlb)
+            single_results[trace.name] = (avg_ttlb, var_ttlb, stddev_ttlb)
         else:
-            single_results[client.name] = None
+            single_results[trace.name] = None
 
     # Compute pairwise TTLB comparisons
     pairwise_results = {}
-    clients = list(analysis.keys())
-    for i in range(len(clients)):
-        client1 = clients[i]
-        ttlb1 = single_results[client1.name][0]
-        pairwise_results[client1.name] = []
-        for j in range(len(clients)):
-            client2 = clients[j]
-            ttlb2 = single_results[client2.name][0]
+    n = len(traces)
+    traces = list(analysis.keys())
+    for i in range(n):
+        trace1 = traces[i]
+        ttlb1 = single_results[trace1.name][0]
+        pairwise_results[trace1.name] = []
+        for j in range(n):
+            trace2 = traces[j]
+            ttlb2 = single_results[trace2.name][0]
             if ttlb1 is not None and ttlb2 is not None:
                 diff = ttlb2 - ttlb1
                 percentage_diff = (diff / ttlb1)
-                pairwise_results[client1.name].append((client2.name, percentage_diff))
+                pairwise_results[trace1.name].append((trace2.name, percentage_diff))
             else:
-                pairwise_results[client1.name].append((client2.name, None))
+                pairwise_results[trace1.name].append((trace2.name, None))
 
     return single_results, pairwise_results
 
@@ -47,21 +48,21 @@ def plot_ttlb_heatmap(pairwise_results: Dict[str, List[Tuple]],
                       title: str = 'TTLB Percentage Difference Heatmap',
                       annot: bool = True,
                       fmt: str = '.2%') -> plt.Figure:    
-    # Extract client names
-    client_names = list(pairwise_results.keys())
-    num_clients = len(client_names)
+    # Extract trace names
+    trace_names = list(pairwise_results.keys())
+    num_traces = len(trace_names)
     
     # Create matrix
-    matrix = np.zeros((num_clients, num_clients))
-    for i, client1 in enumerate(client_names):
-        for j, (client2, pct_diff) in enumerate(pairwise_results[client1]):
+    matrix = np.zeros((num_traces, num_traces))
+    for i, trace1 in enumerate(num_traces):
+        for j, (_, pct_diff) in enumerate(pairwise_results[trace1]):
             if pct_diff is not None:
                 matrix[i, j] = pct_diff
             else:
                 matrix[i, j] = np.nan
     
     # Create DataFrame for better labeling
-    df = pd.DataFrame(matrix, index=client_names, columns=client_names)
+    df = pd.DataFrame(matrix, index=trace_names, columns=trace_names)
     
     # Create figure
     fig, ax = plt.subplots(figsize=(10, 8))
@@ -72,8 +73,8 @@ def plot_ttlb_heatmap(pairwise_results: Dict[str, List[Tuple]],
                 linewidths=0.5, linecolor='white', ax=ax)
     
     # Labels and title
-    ax.set_xlabel('Client (Baseline)', fontsize=12)
-    ax.set_ylabel('Client (Reference)', fontsize=12)
+    ax.set_xlabel('Baseline', fontsize=12)
+    ax.set_ylabel('Reference', fontsize=12)
     ax.set_title(title, fontsize=14, pad=20)
     
     plt.tight_layout()
@@ -81,10 +82,10 @@ def plot_ttlb_heatmap(pairwise_results: Dict[str, List[Tuple]],
     plt.close()
 
 """
-Create a bar chart showing TTLB averages with error bars for each client.
+Create a bar chart showing TTLB averages with error bars for each trace.
 
 Args:
-    single_results: Dictionary with client names as keys and 
+    single_results: Dictionary with trace names as keys and 
                     (avg_ttlb, var_ttlb, stddev_ttlb) tuples as values
     filename: Output filename for bar chart
     title: Title for the chart
@@ -96,32 +97,32 @@ Returns:
 """
 def plot_ttlb_barchart(single_results: Dict[str, Tuple],
                        filename: str = 'ttlb_barchart.png',
-                       title: str = 'TTLB by Client',
+                       title: str = 'TTLB by Trace',
                        error_type: str = 'stddev',
                        sort_by: str = None):
     
     # Filter out None values
-    valid_clients = {k: v for k, v in single_results.items() if v is not None}
+    valid_traces = {k: v for k, v in single_results.items() if v is not None}
     
-    if not valid_clients:
+    if not valid_traces:
         raise ValueError("No valid TTLB data to plot")
     
     # Extract data
-    client_names = list(valid_clients.keys())
-    avg_values = [valid_clients[name][0] for name in client_names]
-    var_values = [valid_clients[name][1] for name in client_names]
-    std_values = [valid_clients[name][2] for name in client_names]
+    trace_names = list(valid_traces.keys())
+    avg_values = [valid_traces[name][0] for name in trace_names]
+    var_values = [valid_traces[name][1] for name in trace_names]
+    std_values = [valid_traces[name][2] for name in trace_names]
     
     # Sort by TTLB if necessary
     if sort_by == 'asc':
         sorted_indices = np.argsort(avg_values)
-        client_names = [client_names[i] for i in sorted_indices]
+        trace_names = [trace_names[i] for i in sorted_indices]
         avg_values = [avg_values[i] for i in sorted_indices]
         var_values = [var_values[i] for i in sorted_indices]
         std_values = [std_values[i] for i in sorted_indices]
     elif sort_by == 'desc':
         sorted_indices = np.argsort(avg_values)[::-1]
-        client_names = [client_names[i] for i in sorted_indices]
+        trace_names = [trace_names[i] for i in sorted_indices]
         avg_values = [avg_values[i] for i in sorted_indices]
         var_values = [var_values[i] for i in sorted_indices]
         std_values = [std_values[i] for i in sorted_indices]
@@ -141,7 +142,7 @@ def plot_ttlb_barchart(single_results: Dict[str, Tuple],
     fig, ax = plt.subplots(figsize=(12, 6))
     
     # Create bar positions
-    x_pos = np.arange(len(client_names))
+    x_pos = np.arange(len(trace_names))
     
     # Create bars
     bars = ax.bar(x_pos, avg_values, color='steelblue', edgecolor='black', linewidth=1.5, alpha=0.8)
@@ -151,11 +152,11 @@ def plot_ttlb_barchart(single_results: Dict[str, Tuple],
                 capthick=2, elinewidth=2, alpha=0.7, label=error_label)
     
     # Customize the plot
-    ax.set_xlabel('Client', fontsize=12, fontweight='bold')
+    ax.set_xlabel('Trace Name', fontsize=12, fontweight='bold')
     ax.set_ylabel('Time to Last Byte (TTLB)', fontsize=12, fontweight='bold')
     ax.set_title(title, fontsize=14, fontweight='bold', pad=20)
     ax.set_xticks(x_pos)
-    ax.set_xticklabels(client_names, rotation=45, ha='right')
+    ax.set_xticklabels(trace_names, rotation=45, ha='right')
     
     # Add grid for better readability
     ax.yaxis.grid(True, linestyle='--', alpha=0.3)

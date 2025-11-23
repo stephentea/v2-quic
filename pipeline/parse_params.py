@@ -24,11 +24,12 @@ class NetworkProfile(NamedTuple):
 
 """Experiment configuration"""
 class Experiment(NamedTuple):
-    name: str
-    endpoint: str
-    clients: List[str]
-    iterations: int
-    profile: NetworkProfile
+    name: str                # experiment name 
+    endpoints: List[str]     # endpoints (must be 1 or more)
+    clients: List[str]       # client names (must be 1 or more)
+    iterations: int          # number of iterations for each client/endpoint
+    profile: NetworkProfile  # network profile (loss/bandwidth/delay/jitter)
+    mode: str                # 'multi_client' or 'multi_endpoint'
 
 """
 Parse the JSON parameter file and create client and experiment dictionaries.
@@ -75,13 +76,31 @@ def parse_params(json_file: str) -> tuple[Dict[str, Client], Dict[str, Experimen
             burst_ingress=profile_data.get('burst_ingress', 0),
             burst_egress=profile_data.get('burst_egress', 0)
         )
+
+        endpoints = exp.get('endpoints', [])
+        clients_list = exp.get('clients', [])
+
+        # Validate: exactly one must be multi-valued
+        num_endpoints = len(endpoints)
+        num_clients = len(clients_list)
+        if num_endpoints > 1 and num_clients > 1:
+            raise ValueError(
+                f"Experiment '{exp.get('name')}': Cannot specify multiple endpoints AND multiple clients. Choose one or the other."
+            )
+
+        # Determine mode
+        if num_endpoints > 1:
+            mode = 'multi_endpoint'
+        else:
+            mode = 'multi_client'
         
         experiment = Experiment(
             name=exp.get('name', ''),
-            endpoint=exp.get('endpoint', ''),
-            clients=exp.get('clients', []),
+            endpoints = endpoints,
+            clients=clients_list,
             iterations=exp.get('iterations', 1),
-            profile=profile
+            profile=profile,
+            mode=mode
         )
         
         experiment_dict[experiment.name] = experiment

@@ -7,13 +7,17 @@ captures packet traces (tshark for H2, qlogs for H3), and saves results.
 """
 
 import os
-import json
 import time
 import pathlib
 import subprocess
 import shutil
 from urllib.parse import urlparse
-from typing import Optional
+from typing import Optional, List, Dict, NamedTuple
+
+"""Network trace"""
+class NetworkTrace(NamedTuple):
+    name: str     # endpoint/client name
+    is_h3: bool   # true iff client is H3
 
 # Import other modules
 import sys
@@ -259,11 +263,10 @@ def run_iteration(client: Client, url: str, iteration: int,
             pcap_process.kill()
         raise e
 
-
 """Run a complete experiment with all specified clients."""
-def run_experiment(experiment: Experiment, client_dict: dict[str, Client]) -> None:
+def run_experiment(experiment: Experiment, client_dict: dict[str, Client]) -> Dict[NetworkTrace, List[pathlib.Path]]:
     print(f'\n{"="*60}'); print(f'Running Experiment: {experiment.name}'); print(f'{"="*60}')
-    print(f'Endpoint: {experiment.endpoint}')
+    print(f'Endpoints: {experiment.endpoints}')
     print(f'Iterations: {experiment.iterations}')
     print(f'Clients: {", ".join(experiment.clients)}')
     
@@ -286,52 +289,120 @@ def run_experiment(experiment: Experiment, client_dict: dict[str, Client]) -> No
         )
         if result.returncode != 0:
             print(f'Warning: {cmd} failed with error: {result.stderr}')
-    
-    # Run each client
-    output_files = {}
-    for client_name in experiment.clients:
+
+    output_files = {}  # maps NetworkTrace to list of files
+
+    # Run each client against the endpoint iterations # of times
+    if experiment.mode == 'multi_client':
+        endpoint = experiment.endpoints[0]
+        endpoint_name = endpoint.replace('https://', '').replace('http://', '').replace('/', '_').replace(':', '_')
+        for client_name in experiment.clients:
+            if client_name not in client_dict:
+                print(f'Warning: Client {client_name} not found in configuration')
+                continue
+
+            client = client_dict[client_name]
+            trace = NetworkTrace(
+                name=client_name,
+                is_h3=client.is_h3
+            )
+            output_files[trace] = []
+            print(f'\n--- Running client: {client_name} ---')
+            
+            # Create client-specific output directory
+            if client.is_h3:
+                client_output_dir = exp_qlog_dir / client_name
+            else:
+                client_output_dir = exp_pcap_dir / client_name
+            client_output_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Run iterations
+            for i in range(0, experiment.iterations):
+                print(f'  Iteration {i + 1}/{experiment.iterations}...', end=' ')
+                
+                retries = 0
+                max_retries = 10
+                
+                while retries < max_retries:
+                    try:
+                        output_file = run_iteration(
+                            client, 
+                            endpoint,
+                            i,
+                            qlog_output_dir=client_output_dir if client.is_h3 else None,
+                            pcap_output_dir=client_output_dir if not client.is_h3 else None
+                        )
+                        output_files[trace].append(output_file)
+                        print(f'✓ created output file {output_file}')
+                        break
+                    
+                    except Exception as e:
+                        retries += 1
+                        if retries >= max_retries:
+                            print(f'✗ Failed after {max_retries} retries: {e}')
+                            raise
+                        else:
+                            print(f'Retry {retries}/{max_retries}... with error: {e}', end=' ')
+            
+            print(f'Completed {client_name}: {experiment.iterations} iterations')
+
+    # Run client against each endpoint iterations # of times
+    else:
+        client_name = experiment.clients[0]
+        
         if client_name not in client_dict:
-            print(f'Warning: Client {client_name} not found in configuration')
-            continue
+            raise ValueError(f'Client {client_name} not found in configuration')
         
         client = client_dict[client_name]
-        output_files[client] = []
         print(f'\n--- Running client: {client_name} ---')
         
-        # Create client-specific output directory
-        if client.is_h3:
-            client_output_dir = exp_qlog_dir / client_name
-        else:
-            client_output_dir = exp_pcap_dir / client_name
-        client_output_dir.mkdir(parents=True, exist_ok=True)
-        
-        # Run iterations
-        for i in range(0, experiment.iterations):
-            print(f'  Iteration {i + 1}/{experiment.iterations}...', end=' ')
+        for endpoint in experiment.endpoints:
+            print(f'\n  Target Endpoint: {endpoint}')
+            endpoint_name = endpoint.replace('https://', '').replace('http://', '').replace('/', '_').replace(':', '_')
+
+            trace = NetworkTrace(
+                name=endpoint_name,
+                is_h3=client.is_h3
+            )
+            output_files[trace] = []
             
-            retries = 0
-            max_retries = 10
+            # Create endpoint-specific output directory        
+            if client.is_h3:
+                endpoint_output_dir = exp_qlog_dir / endpoint_name
+            else:
+                endpoint_output_dir = exp_pcap_dir / endpoint_name
+            endpoint_output_dir.mkdir(parents=True, exist_ok=True)
             
-            while retries < max_retries:
-                try:
-                    output_file = run_iteration(
-                        client, 
-                        experiment.endpoint, 
-                        i,
-                        qlog_output_dir=client_output_dir if client.is_h3 else None,
-                        pcap_output_dir=client_output_dir if not client.is_h3 else None
-                    )
-                    output_files[client].append(output_file)
-                    print(f'✓ created output file {output_file}')
-                    break
+            # Run iterations for this endpoint
+            for i in range(0, experiment.iterations):
+                print(f'    Iteration {i + 1}/{experiment.iterations}...', end=' ')
                 
-                except Exception as e:
-                    retries += 1
-                    if retries >= max_retries:
-                        print(f'✗ Failed after {max_retries} retries: {e}')
-                        raise
-                    else:
-                        print(f'Retry {retries}/{max_retries}... with error: {e}', end=' ')
+                retries = 0
+                max_retries = 10
+                
+                while retries < max_retries:
+                    try:
+                        output_file = run_iteration(
+                            client, 
+                            endpoint,
+                            i,
+                            qlog_output_dir=endpoint_output_dir if client.is_h3 else None,
+                            pcap_output_dir=endpoint_output_dir if not client.is_h3 else None
+                        )
+                        output_files[trace].append(output_file)
+                        print(f'✓ created output file {output_file}')
+                        break
+                    
+                    except Exception as e:
+                        retries += 1
+                        if retries >= max_retries:
+                            print(f'✗ Failed after {max_retries} retries: {e}')
+                            raise
+                        else:
+                            print(f'Retry {retries}/{max_retries}... with error: {e}', end=' ')
+            
+            print(f'  Completed {endpoint}: {experiment.iterations} iterations')
         
-        print(f'Completed {client_name}: {experiment.iterations} iterations')
+        print(f'Completed all endpoints for {client_name}')
+
     return output_files

@@ -8,19 +8,19 @@ sys.path.insert(0, str(pathlib.Path(__file__).parent.parent.absolute()))
 from analysis.cda_analysis import Segment
 
 """
-Compare segments between two clients across multiple runs.
+Compare segments between two traces across multiple runs.
 
 Args:
-    segments1: List of segment lists for client 1 (one list per run)
-    segments2: List of segment lists for client 2 (one list per run)
-    client1_name: Name of client 1
-    client2_name: Name of client 2
+    segments1: List of segment lists for trace 1 (one list per run)
+    segments2: List of segment lists for trace 2 (one list per run)
+    name1: Name of trace 1
+    name2: Name of trace 2
 
 Returns:
     Dictionary containing comparison results
 """
 def segment_analysis(segments1: List[List[Segment]], segments2: List[List[Segment]], 
-                     client1_name: str = "Client 1", client2_name: str = "Client 2"):
+                     name1: str = "Trace 1", name2: str = "Trace 2"):
     # Get segment counts for each iteration
     seg1_lens = [len(segment) for segment in segments1]
     seg2_lens = [len(segment) for segment in segments2]
@@ -33,75 +33,75 @@ def segment_analysis(segments1: List[List[Segment]], segments2: List[List[Segmen
     max_seg1 = max(seg1_lens)
     max_seg2 = max(seg2_lens)
     
-    # Initialize storage for per-segment statistics for client 1
-    client1_durations    = {i: [] for i in range(max_seg1)}
-    client1_avg_rates    = {i: [] for i in range(max_seg1)}
-    client1_median_rates = {i: [] for i in range(max_seg1)}
-    client1_bytes        = {i: [] for i in range(max_seg1)}
+    # Initialize storage for per-segment statistics for trace 1
+    trace1_durations    = {i: [] for i in range(max_seg1)}
+    trace1_avg_rates    = {i: [] for i in range(max_seg1)}
+    trace1_median_rates = {i: [] for i in range(max_seg1)}
+    trace1_bytes        = {i: [] for i in range(max_seg1)}
     
-    # Initialize storage for per-segment statistics for client 2
-    client2_durations    = {i: [] for i in range(max_seg2)}
-    client2_avg_rates    = {i: [] for i in range(max_seg2)}
-    client2_median_rates = {i: [] for i in range(max_seg2)}
-    client2_bytes        = {i: [] for i in range(max_seg2)}
+    # Initialize storage for per-segment statistics for trace 2
+    trace2_durations    = {i: [] for i in range(max_seg2)}
+    trace2_avg_rates    = {i: [] for i in range(max_seg2)}
+    trace2_median_rates = {i: [] for i in range(max_seg2)}
+    trace2_bytes        = {i: [] for i in range(max_seg2)}
     
-    # Collect segment statistics for client 1
+    # Collect segment statistics for trace 1
     for segments in segments1:
         for i, segment in enumerate(segments):
-            client1_durations[i].append(segment.duration_ms)
-            client1_avg_rates[i].append(segment.avg_rate)
-            client1_median_rates[i].append(segment.median_rate)
-            client1_bytes[i].append(segment.bytes_transferred)
+            trace1_durations[i].append(segment.duration_ms)
+            trace1_avg_rates[i].append(segment.avg_rate)
+            trace1_median_rates[i].append(segment.median_rate)
+            trace1_bytes[i].append(segment.bytes_transferred)
     
-    # Collect segment statistics for client 2
+    # Collect segment statistics for trace 2
     for segments in segments2:
         for i, segment in enumerate(segments):
-            client2_durations[i].append(segment.duration_ms)
-            client2_avg_rates[i].append(segment.avg_rate)
-            client2_median_rates[i].append(segment.median_rate)
-            client2_bytes[i].append(segment.bytes_transferred)
+            trace2_durations[i].append(segment.duration_ms)
+            trace2_avg_rates[i].append(segment.avg_rate)
+            trace2_median_rates[i].append(segment.median_rate)
+            trace2_bytes[i].append(segment.bytes_transferred)
     
     # Compute statistics for each segment position
-    client1_stats = []
+    trace1_stats = []
     for i in range(max_seg1):
-        if len(client1_durations[i]) > 0:
+        if len(trace1_durations[i]) > 0:
             stats = {
                 'segment_id': i,
-                'avg_duration': np.mean(client1_durations[i]),
-                'avg_bytes': np.mean(client1_bytes[i]),
-                'avg_rate': np.mean(client1_avg_rates[i]),
-                'avg_median_rate': np.mean(client1_median_rates[i]),
+                'avg_duration': np.mean(trace1_durations[i]),
+                'avg_bytes': np.mean(trace1_bytes[i]),
+                'avg_rate': np.mean(trace1_avg_rates[i]),
+                'avg_median_rate': np.mean(trace1_median_rates[i]),
                 'is_common': (i < num_common_seg1)  # Present in all iterations
             }
-            client1_stats.append(stats)
+            trace1_stats.append(stats)
     
-    client2_stats = []
+    trace2_stats = []
     for i in range(max_seg2):
-        if len(client2_durations[i]) > 0:
+        if len(trace2_durations[i]) > 0:
             stats = {
                 'segment_id': i,
-                'avg_duration': np.mean(client2_durations[i]),
-                'avg_bytes': np.mean(client2_bytes[i]),
-                'avg_rate': np.mean(client2_avg_rates[i]),
-                'avg_median_rate': np.mean(client2_median_rates[i]),
+                'avg_duration': np.mean(trace2_durations[i]),
+                'avg_bytes': np.mean(trace2_bytes[i]),
+                'avg_rate': np.mean(trace2_avg_rates[i]),
+                'avg_median_rate': np.mean(trace2_median_rates[i]),
                 'is_common': (i < num_common_seg2)  # Present in all iterations
             }
-            client2_stats.append(stats)
+            trace2_stats.append(stats)
     
     # Summary statistics
     summary = {
-        'client1_name': client1_name,
-        'client2_name': client2_name,
-        'num_common_segments_client1': num_common_seg1,
-        'num_common_segments_client2': num_common_seg2,
-        'avg_segments_client1': np.mean(seg1_lens),
-        'avg_segments_client2': np.mean(seg2_lens)
+        'trace1_name': trace1_name,
+        'trace2_name': trace2_name,
+        'num_common_segments_trace1': num_common_seg1,
+        'num_common_segments_trace2': num_common_seg2,
+        'avg_segments_trace1': np.mean(seg1_lens),
+        'avg_segments_trace2': np.mean(seg2_lens)
     }
     
     return {
         'summary': summary,
-        'client1_stats': client1_stats,
-        'client2_stats': client2_stats,
+        'trace1_stats': trace1_stats,
+        'trace2_stats': trace2_stats,
     }
 
 """
@@ -119,18 +119,18 @@ def find_first_significant_difference(comparison_results: Dict,
                                       duration_threshold: float = 5.0,
                                       rate_threshold: float = 5.0) -> Dict:
     
-    client1_stats = comparison_results['client1_stats']
-    client2_stats = comparison_results['client2_stats']
+    trace1_stats = comparison_results['trace1_stats']
+    trace2_stats = comparison_results['trace2_stats']
     
-    # Create lookup by segment_id for client2
-    client2_lookup = {s['segment_id']: s for s in client2_stats}
+    # Create lookup by segment_id for trace2
+    trace2_lookup = {s['segment_id']: s for s in trace2_stats}
     
-    for c1_stats in client1_stats:
+    for c1_stats in trace1_stats:
         seg_id = c1_stats['segment_id']
-        if seg_id not in client2_lookup:
+        if seg_id not in trace2_lookup:
             continue
         
-        c2_stats = client2_lookup[seg_id]
+        c2_stats = trace2_lookup[seg_id]
         
         # Calculate percentage differences
         if c1_stats['avg_duration'] > 0:
@@ -151,14 +151,14 @@ def find_first_significant_difference(comparison_results: Dict,
                 'bytes_pct_diff': (c2_stats['avg_bytes'] - c1_stats['avg_bytes']) / c1_stats['avg_bytes'] * 100 if c1_stats['avg_bytes'] > 0 else 0,
                 'exceeds_duration_threshold': duration_diff > duration_threshold,
                 'exceeds_rate_threshold': rate_diff > rate_threshold,
-                'client1_stats': c1_stats,
-                'client2_stats': c2_stats
+                'trace1_stats': c1_stats,
+                'trace2_stats': c2_stats
             }
     
     return None
 
 """
-Visualize segment comparison between two clients.
+Visualize segment comparison between two traces.
 
 Args:
     comparison_results: Dictionary returned by segment_analysis()
@@ -168,32 +168,32 @@ def visualize_segment_comparison(comparison_results: Dict,
                                  filename: str = "segment_comparison.png"):
     
     summary = comparison_results['summary']
-    client1_stats = comparison_results['client1_stats']
-    client2_stats = comparison_results['client2_stats']
+    trace1_stats = comparison_results['trace1_stats']
+    trace2_stats = comparison_results['trace2_stats']
     
-    client1_name = summary['client1_name']
-    client2_name = summary['client2_name']
-    avg_seg1 = summary['avg_segments_client1']
-    avg_seg2 = summary['avg_segments_client2']
+    trace1_name = summary['trace1_name']
+    trace2_name = summary['trace2_name']
+    avg_seg1 = summary['avg_segments_trace1']
+    avg_seg2 = summary['avg_segments_trace2']
     
     # Extract data for plotting
-    c1_segment_ids = [s['segment_id'] for s in client1_stats]
-    c1_durations = [s['avg_duration'] for s in client1_stats]
-    c1_bytes = [s['avg_bytes'] for s in client1_stats]
-    c1_rates = [s['avg_rate'] for s in client1_stats]
-    c1_median_rates = [s['avg_median_rate'] for s in client1_stats]
-    c1_is_common = [s['is_common'] for s in client1_stats]
+    c1_segment_ids = [s['segment_id'] for s in trace1_stats]
+    c1_durations = [s['avg_duration'] for s in trace1_stats]
+    c1_bytes = [s['avg_bytes'] for s in trace1_stats]
+    c1_rates = [s['avg_rate'] for s in trace1_stats]
+    c1_median_rates = [s['avg_median_rate'] for s in trace1_stats]
+    c1_is_common = [s['is_common'] for s in trace1_stats]
     
-    c2_segment_ids = [s['segment_id'] for s in client2_stats]
-    c2_durations = [s['avg_duration'] for s in client2_stats]
-    c2_bytes = [s['avg_bytes'] for s in client2_stats]
-    c2_rates = [s['avg_rate'] for s in client2_stats]
-    c2_median_rates = [s['avg_median_rate'] for s in client2_stats]
-    c2_is_common = [s['is_common'] for s in client2_stats]
+    c2_segment_ids = [s['segment_id'] for s in trace2_stats]
+    c2_durations = [s['avg_duration'] for s in trace2_stats]
+    c2_bytes = [s['avg_bytes'] for s in trace2_stats]
+    c2_rates = [s['avg_rate'] for s in trace2_stats]
+    c2_median_rates = [s['avg_median_rate'] for s in trace2_stats]
+    c2_is_common = [s['is_common'] for s in trace2_stats]
     
     # Create figure with 4 subplots
     fig, axes = plt.subplots(2, 2, figsize=(16, 10))
-    fig.suptitle(f'Segment Comparison: {client1_name} (avg: {avg_seg1:.1f} segs) vs {client2_name} (avg: {avg_seg2:.1f} segs)', 
+    fig.suptitle(f'Segment Comparison: {trace1_name} (avg: {avg_seg1:.1f} segs) vs {trace2_name} (avg: {avg_seg2:.1f} segs)', 
                  fontsize=16, fontweight='bold')
     
     # Helper function to plot with conditional styling
@@ -231,9 +231,9 @@ def visualize_segment_comparison(comparison_results: Dict,
     # Plot 1: Duration comparison
     ax1 = axes[0, 0]
     plot_with_style(ax1, c1_segment_ids, c1_durations, c1_is_common, 
-                   client1_name, 'tab:blue', 'o')
+                   trace1_name, 'tab:blue', 'o')
     plot_with_style(ax1, c2_segment_ids, c2_durations, c2_is_common, 
-                   client2_name, 'tab:orange', 's')
+                   trace2_name, 'tab:orange', 's')
     ax1.set_xlabel('Segment ID')
     ax1.set_ylabel('Average Duration (ms)')
     ax1.set_title('Average Segment Duration')
@@ -243,9 +243,9 @@ def visualize_segment_comparison(comparison_results: Dict,
     # Plot 2: Bytes transferred comparison
     ax2 = axes[0, 1]
     plot_with_style(ax2, c1_segment_ids, c1_bytes, c1_is_common, 
-                   client1_name, 'tab:blue', 'o')
+                   trace1_name, 'tab:blue', 'o')
     plot_with_style(ax2, c2_segment_ids, c2_bytes, c2_is_common, 
-                   client2_name, 'tab:orange', 's')
+                   trace2_name, 'tab:orange', 's')
     ax2.set_xlabel('Segment ID')
     ax2.set_ylabel('Average Bytes Transferred')
     ax2.set_title('Average Bytes Transferred')
@@ -255,9 +255,9 @@ def visualize_segment_comparison(comparison_results: Dict,
     # Plot 3: Rate comparison
     ax3 = axes[1, 0]
     plot_with_style(ax3, c1_segment_ids, c1_rates, c1_is_common, 
-                   client1_name, 'tab:blue', 'o')
+                   trace1_name, 'tab:blue', 'o')
     plot_with_style(ax3, c2_segment_ids, c2_rates, c2_is_common, 
-                   client2_name, 'tab:orange', 's')
+                   trace2_name, 'tab:orange', 's')
     ax3.set_xlabel('Segment ID')
     ax3.set_ylabel('Average Rate (bytes/ms)')
     ax3.set_title('Average Rate')
@@ -267,9 +267,9 @@ def visualize_segment_comparison(comparison_results: Dict,
     # Plot 4: Median rate comparison
     ax4 = axes[1, 1]
     plot_with_style(ax4, c1_segment_ids, c1_median_rates, c1_is_common, 
-                   client1_name, 'tab:blue', 'o')
+                   trace1_name, 'tab:blue', 'o')
     plot_with_style(ax4, c2_segment_ids, c2_median_rates, c2_is_common, 
-                   client2_name, 'tab:orange', 's')
+                   trace2_name, 'tab:orange', 's')
     ax4.set_xlabel('Segment ID')
     ax4.set_ylabel('Average Median Rate (bytes/ms)')
     ax4.set_title('Average Median Rate')
