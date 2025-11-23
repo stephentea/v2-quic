@@ -17,7 +17,6 @@ from pipeline.parse_params import NetworkProfile
 
 # Constants
 ROOT_TRAFFIC_RATE_LIMIT = 10000000.0  # 10 Gbps in Kbit
-DEFAULT_INTERFACE = 'enp0s3'
 IFB_INTERFACE = 'ifb0'
 HTB_HANDLE = '1a64:'
 NETEM_HANDLE = '2054:'
@@ -55,7 +54,7 @@ Args:
 Returns:
     List of cleanup command strings
 """
-def generate_cleanup_cmds(interface: str = DEFAULT_INTERFACE) -> list[str]:
+def generate_cleanup_cmds(interface: str = '') -> list[str]:
     
     cmds = []
     
@@ -81,7 +80,7 @@ Returns:
     List of command strings
 """
 def generate_egress_cmds(profile: NetworkProfile, 
-                         interface: str = DEFAULT_INTERFACE) -> list[str]:
+                         interface: str = '') -> list[str]:
     cmds = []
     
     # Build netem parameter string
@@ -146,7 +145,7 @@ Returns:
     List of command strings
 """
 def generate_ingress_cmds(profile: NetworkProfile, 
-                          interface: str = DEFAULT_INTERFACE) -> list[str]:
+                          interface: str = '') -> list[str]:
     cmds = []
     
     # Build netem parameter string
@@ -216,7 +215,7 @@ Returns:
     List of command strings, or None if error occurred
 """
 def generate_cmds(profile: NetworkProfile, 
-                  interface: str = DEFAULT_INTERFACE) -> Optional[list[str]]:
+                  interface: str = '') -> Optional[list[str]]:
     if not validate_profile(profile):
         return None
     

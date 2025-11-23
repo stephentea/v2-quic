@@ -85,7 +85,7 @@ def prepare_environment() -> dict:
     return env
 
 
-def record_pcap(url_host: str, interface: str = 'enp0s3') -> subprocess.Popen:
+def record_pcap(url_host: str, interface: str = '') -> subprocess.Popen:
     """Start capturing packets with tshark for H2 clients."""
     pcap_file = TMP_PCAP / 'out.pcapng'
     
@@ -188,7 +188,8 @@ def build_client_command(client: Client, url: str, qlog_dir: Optional[pathlib.Pa
 
 def run_iteration(client: Client, url: str, iteration: int, 
                   qlog_output_dir: Optional[pathlib.Path] = None,
-                  pcap_output_dir: Optional[pathlib.Path] = None) -> str:
+                  pcap_output_dir: Optional[pathlib.Path] = None,
+                  interface: str = '') -> str:
     """Run a single iteration of a client request."""
     url_host, url_port, url_path = parse_url(url)
     
@@ -199,7 +200,7 @@ def run_iteration(client: Client, url: str, iteration: int,
         # For H2 clients, start packet capture
         if not client.is_h3:
             remove_files(TMP_PCAP)
-            pcap_process = record_pcap(url_host)
+            pcap_process = record_pcap(url_host, interface=interface)
         else:
             # For H3 clients, clean qlog directory
             remove_files(TMP_QLOG)
@@ -280,7 +281,7 @@ def run_experiment(experiment: Experiment, client_dict: dict[str, Client]) -> Di
         dir_path.mkdir(parents=True, exist_ok=True)
 
     # Run network commands
-    cmds : str = generate_cmds(experiment.profile)
+    cmds : str = generate_cmds(experiment.profile, experiment.interface)
     for cmd in cmds:
         result = subprocess.run(
             cmd,
@@ -331,7 +332,8 @@ def run_experiment(experiment: Experiment, client_dict: dict[str, Client]) -> Di
                             endpoint,
                             i,
                             qlog_output_dir=client_output_dir if client.is_h3 else None,
-                            pcap_output_dir=client_output_dir if not client.is_h3 else None
+                            pcap_output_dir=client_output_dir if not client.is_h3 else None,
+                            interface=experiment.interface
                         )
                         output_files[trace].append(output_file)
                         print(f'✓ created output file {output_file}')
@@ -388,7 +390,8 @@ def run_experiment(experiment: Experiment, client_dict: dict[str, Client]) -> Di
                             endpoint,
                             i,
                             qlog_output_dir=endpoint_output_dir if client.is_h3 else None,
-                            pcap_output_dir=endpoint_output_dir if not client.is_h3 else None
+                            pcap_output_dir=endpoint_output_dir if not client.is_h3 else None,
+                            interface=experiment.interface
                         )
                         output_files[trace].append(output_file)
                         print(f'✓ created output file {output_file}')

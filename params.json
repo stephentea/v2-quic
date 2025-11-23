@@ -1,4 +1,5 @@
 {
+  "network_interface": "enp0s3",
   "clients": [
     "ngtcp2_h3",
     "proxygen_h3",
@@ -11,7 +12,7 @@
   },
   "experiments": [
     {
-      "name": "meta_5mb_50mbps_10ms_25ms",
+      "name": "100kb-multi-endpoint",
       "endpoints": [
         "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png",
         "https://scontent.xx.fbcdn.net/speedtest-100KB",
@@ -19,6 +20,7 @@
       ],
       "clients": ["proxygen_h3"],
       "iterations": 3,
+      "interface": "enp0s3",  
       "profile": {
         "loss": 0.0,
         "delay": 10,

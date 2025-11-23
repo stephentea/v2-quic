@@ -28,6 +28,7 @@ class Experiment(NamedTuple):
     endpoints: List[str]     # endpoints (must be 1 or more)
     clients: List[str]       # client names (must be 1 or more)
     iterations: int          # number of iterations for each client/endpoint
+    interface: str           # network interface (ex: eth0, enp0s3)
     profile: NetworkProfile  # network profile (loss/bandwidth/delay/jitter)
     mode: str                # 'multi_client' or 'multi_endpoint'
 
@@ -99,6 +100,7 @@ def parse_params(json_file: str) -> tuple[Dict[str, Client], Dict[str, Experimen
             endpoints = endpoints,
             clients=clients_list,
             iterations=exp.get('iterations', 1),
+            interface=exp.get('interface', ''),
             profile=profile,
             mode=mode
         )
