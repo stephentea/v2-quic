@@ -13,14 +13,14 @@ Compare segments between two traces across multiple runs.
 Args:
     segments1: List of segment lists for trace 1 (one list per run)
     segments2: List of segment lists for trace 2 (one list per run)
-    name1: Name of trace 1
-    name2: Name of trace 2
+    trace1_name: Name of trace 1
+    trace2_name: Name of trace 2
 
 Returns:
     Dictionary containing comparison results
 """
 def segment_analysis(segments1: List[List[Segment]], segments2: List[List[Segment]], 
-                     name1: str = "Trace 1", name2: str = "Trace 2"):
+                     trace1_name: str = "Trace 1", trace2_name: str = "Trace 2"):
     # Get segment counts for each iteration
     seg1_lens = [len(segment) for segment in segments1]
     seg2_lens = [len(segment) for segment in segments2]
