@@ -1,0 +1,15 @@
+{
+  "google": {
+    "100KB": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png",
+    "1MB": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png",
+    "5MB": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"
+  },
+  "meta": {
+    "100KB": "https://scontent.xx.fbcdn.net/speedtest-100KB",
+    "1MB": "https://scontent.xx.fbcdn.net/speedtest-1MB",
+    "5MB": "https://scontent.xx.fbcdn.net/speedtest-5MB"
+  },
+  "cloudflare": {
+    "100KB": "https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png",
+  }
+}
