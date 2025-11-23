@@ -22,8 +22,8 @@ def analyze_ttlb(analysis) -> Tuple[Dict[str, Tuple], Dict[str, List[Tuple]]]:
 
     # Compute pairwise TTLB comparisons
     pairwise_results = {}
-    n = len(traces)
     traces = list(analysis.keys())
+    n = len(traces)
     for i in range(n):
         trace1 = traces[i]
         ttlb1 = single_results[trace1.name][0]
@@ -54,7 +54,7 @@ def plot_ttlb_heatmap(pairwise_results: Dict[str, List[Tuple]],
     
     # Create matrix
     matrix = np.zeros((num_traces, num_traces))
-    for i, trace1 in enumerate(num_traces):
+    for i, trace1 in enumerate(trace_names):
         for j, (_, pct_diff) in enumerate(pairwise_results[trace1]):
             if pct_diff is not None:
                 matrix[i, j] = pct_diff
