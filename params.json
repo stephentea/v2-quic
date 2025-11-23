@@ -12,8 +12,12 @@
   "experiments": [
     {
       "name": "meta_5mb_50mbps_10ms_25ms",
-      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
-      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "endpoints": [
+        "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png",
+        "https://scontent.xx.fbcdn.net/speedtest-100KB",
+        "https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"
+      ],
+      "clients": ["proxygen_h3"],
       "iterations": 3,
       "profile": {
         "loss": 0.0,

@@ -1,5 +1,7 @@
 import pathlib
+import pickle
 from typing import List, Dict, Tuple
+from datetime import datetime
 import numpy as np
 
 # Import the parser
@@ -18,8 +20,8 @@ def main():
     (clients, experiments) = parse_params('params.json', )
     for experiment in experiments.values():
         output_files = run_experiment(experiment, clients)
-        analysis: Dict[NetworkTrace, Dict] = {}             # NetworkTrace -> Analysis Results
-        all_segments: List[Tuple[str, List[Segment]]]  = [] # List of List of Segments per NetworkTrace
+        analysis: Dict[NetworkTrace, Dict] = {}                   # NetworkTrace -> Analysis Results
+        all_segments: List[Tuple[str, List[List[Segment]]]]  = [] # List of List of Segments per NetworkTrace
         for (trace, outputs) in output_files.items():
             analysis[trace]              = []
             curr_segments: List[Segment] = []
@@ -45,17 +47,40 @@ def main():
             
             all_segments.append((trace.name, curr_segments))
         
-        # Analyze TTLB
-        single_ttlb_res, pairwise_ttlb_res = analyze_ttlb(analysis)
-        plot_ttlb_barchart(single_ttlb_res, filename=f'ttlb-barchart-{experiment.name}')
-        plot_ttlb_heatmap(pairwise_ttlb_res, filename=f'ttlb-heatmap-{experiment.name}')
+        # Generate unique timestamp for file names
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+        
+        # Save all_segments to pickle file
+        segments_filename = f'segments_data_{experiment.name}_{timestamp}.pkl'
+        with open(segments_filename, 'wb') as f:
+            pickle.dump(all_segments, f)
+        print(f"Saved segments data to: {segments_filename}")
+        
+        # Save analysis dict to pickle file
+        analysis_filename = f'analysis_data_{experiment.name}_{timestamp}.pkl'
+        with open(analysis_filename, 'wb') as f:
+            pickle.dump(analysis, f)
+        print(f"Saved analysis data to: {analysis_filename}")
 
-        # Analyze all pairwise segments
-        for i in range(len(all_segments)):
-            for j in range(i + 1, len(all_segments)):
-                (name_i, segments_i) = all_segments[i]
-                (name_j, segments_j) = all_segments[j]
-                segment_cmp = segment_analysis(segments_i, segments_j, name_i, name_j)
-                visualize_segment_comparison(segment_cmp, filename=f'segments-{experiment.name}-{name_i}-vs-{name_j}')
+        # # Load segment data
+        # with open(segments_filename, 'rb') as f:
+        #     all_segments_load = pickle.load(f)
+
+        # # Load analysis data
+        # with open(analysis_filename, 'rb') as f:
+        #     analysis_load = pickle.load(f)
+        
+        # # Analyze TTLB
+        # single_ttlb_res, pairwise_ttlb_res = analyze_ttlb(analysis_load)
+        # plot_ttlb_barchart(single_ttlb_res, filename=f'ttlb-barchart-{experiment.name}')
+        # plot_ttlb_heatmap(pairwise_ttlb_res, filename=f'ttlb-heatmap-{experiment.name}')
+
+        # # Analyze all pairwise segments
+        # for i in range(len(all_segments_load)):
+        #     for j in range(i + 1, len(all_segments_load)):
+        #         (name_i, segments_i) = all_segments_load[i]
+        #         (name_j, segments_j) = all_segments_load[j]
+        #         segment_cmp = segment_analysis(segments_i, segments_j, name_i, name_j)
+        #         visualize_segment_comparison(segment_cmp, filename=f'segments-{experiment.name}-{name_i}-vs-{name_j}')
 
 main()

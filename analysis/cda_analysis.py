@@ -95,7 +95,7 @@ def detect_rate_changepoints_pelt(rtts: np.ndarray,
                                   penalty: Optional[float] = None,
                                   penalty_factor: Optional[float] = None) -> List[int]:
     if len(rtts) < min_segment_length * 2:
-        print("   WARNING: Trace too short for PELT segmentation.")
+        print("   Warning: Trace too short for PELT segmentation.")
         return []
     
     # Smooth cumulative bytes

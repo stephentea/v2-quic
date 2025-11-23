@@ -161,8 +161,9 @@ def build_client_command(client: Client, url: str, qlog_dir: Optional[pathlib.Pa
                 f'--host={url_host}',
                 f'--port={url_port}',
                 f'--path={url_path}',
-                '--httpversion=1.1',
-                '--log_response=false'
+                '--httpversion=3',
+                '--log_response=false',
+                '--quic_version=1'
             ])
             if qlog_dir:
                 cmd.append(f'--qlogger_path={qlog_dir}')
@@ -295,7 +296,7 @@ def run_experiment(experiment: Experiment, client_dict: dict[str, Client]) -> Di
     # Run each client against the endpoint iterations # of times
     if experiment.mode == 'multi_client':
         endpoint = experiment.endpoints[0]
-        endpoint_name = endpoint.replace('https://', '').replace('http://', '').replace('/', '_').replace(':', '_')
+        endpoint_name = endpoint.replace('https://', '').replace('http://', '').replace('/', '_').replace(':', '_').replace('.', '_')
         for client_name in experiment.clients:
             if client_name not in client_dict:
                 print(f'Warning: Client {client_name} not found in configuration')
@@ -358,7 +359,7 @@ def run_experiment(experiment: Experiment, client_dict: dict[str, Client]) -> Di
         
         for endpoint in experiment.endpoints:
             print(f'\n  Target Endpoint: {endpoint}')
-            endpoint_name = endpoint.replace('https://', '').replace('http://', '').replace('/', '_').replace(':', '_')
+            endpoint_name = endpoint.replace('https://', '').replace('http://', '').replace('/', '_').replace(':', '_').replace('.', '_')
 
             trace = NetworkTrace(
                 name=endpoint_name,
