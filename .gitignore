@@ -1,3 +1,6 @@
 sslkeylog.log
 tmp/*
 data/*
+*.tar.gz
+executables/*
+results/*

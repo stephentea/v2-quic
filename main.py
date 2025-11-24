@@ -1,3 +1,4 @@
+import os
 import pathlib
 import pickle
 from typing import List, Dict, Tuple
@@ -16,6 +17,7 @@ from analysis.segment_analysis import Segment, segment_analysis, find_first_sign
 
 
 def main():
+    os.makedirs('results', exist_ok=True)
     # Run each experiment 
     (clients, experiments) = parse_params('params.json')
     for experiment in experiments.values():
@@ -50,13 +52,13 @@ def main():
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
         
         # Save all_segments to pickle file
-        segments_filename = f'segments_data_{experiment.name}_{timestamp}.pkl'
+        segments_filename = f'results/segments_data_{experiment.name}_{timestamp}.pkl'
         with open(segments_filename, 'wb') as f:
             pickle.dump(all_segments, f)
         print(f"Saved segments data to: {segments_filename}")
         
         # Save analysis dict to pickle file
-        analysis_filename = f'analysis_data_{experiment.name}_{timestamp}.pkl'
+        analysis_filename = f'results/analysis_data_{experiment.name}_{timestamp}.pkl'
         with open(analysis_filename, 'wb') as f:
             pickle.dump(analysis, f)
         print(f"Saved analysis data to: {analysis_filename}")
