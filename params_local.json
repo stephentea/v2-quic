@@ -1,0 +1,1121 @@
+{
+  "clients": [
+    "ngtcp2_h3",
+    "proxygen_h3",
+    "curl_h2"
+  ],
+  "client-exec-paths": {
+    "ngtcp2_h3": "/home/stephenchien/ngtcp2/examples/wsslclient",
+    "proxygen_h3": "/home/stephenchien/proxygen/proxygen/_build/proxygen/httpserver/hq",
+    "curl_h2": "/usr/bin/curl"
+  },
+  "experiments": [
+    {
+      "name": "100kb-multi-endpoint",
+      "endpoints": [
+        "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png",
+        "https://scontent.xx.fbcdn.net/speedtest-100KB",
+        "https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"
+      ],
+      "clients": ["ngtcp2_h3"],
+      "iterations": 3,
+      "interface": "enp0s3",  
+      "profile": {
+        "loss": 0,
+        "delay": 0,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "1mb-multi-endpoint",
+      "endpoints": [
+        "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png",
+        "https://scontent.xx.fbcdn.net/speedtest-1MB"
+      ],
+      "clients": ["ngtcp2_h3"],
+      "iterations": 3,
+      "interface": "enp0s3",  
+      "profile": {
+        "loss": 0,
+        "delay": 0,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "5mb-multi-endpoint",
+      "endpoints": [
+        "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg",
+        "https://scontent.xx.fbcdn.net/speedtest-5MB"
+      ],
+      "clients": ["ngtcp2_h3"],
+      "iterations": 3,
+      "interface": "enp0s3",  
+      "profile": {
+        "loss": 0,
+        "delay": 0,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-100KB-loss-0.1",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0.1,
+        "delay": 0,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-100KB-loss-1.0",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 1.0,
+        "delay": 0,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-100KB-delay-10",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 10,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-100KB-delay-50",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-100KB-delay-100",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 100,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-100KB-bw-10",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 0,
+        "bw": 10,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-100KB-bw-50",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 0,
+        "bw": 50,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-100KB-delay-50-jitter-5",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 5,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-100KB-delay-50-jitter-10",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 10,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-100KB-delay-50-jitter-25",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 25,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-1MB-loss-0.1",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0.1,
+        "delay": 0,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-1MB-loss-1.0",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 1.0,
+        "delay": 0,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-1MB-delay-10",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 10,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-1MB-delay-50",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-1MB-delay-100",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 100,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-1MB-bw-10",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 0,
+        "bw": 10,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-1MB-bw-50",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 0,
+        "bw": 50,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-1MB-delay-50-jitter-5",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 5,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-1MB-delay-50-jitter-10",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 10,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-1MB-delay-50-jitter-25",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 25,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-5MB-loss-0.1",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0.1,
+        "delay": 0,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-5MB-loss-1.0",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 1.0,
+        "delay": 0,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-5MB-delay-10",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 10,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-5MB-delay-50",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-5MB-delay-100",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 100,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-5MB-bw-10",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 0,
+        "bw": 10,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-5MB-bw-50",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 0,
+        "bw": 50,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-5MB-delay-50-jitter-5",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 5,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-5MB-delay-50-jitter-10",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 10,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "google-5MB-delay-50-jitter-25",
+      "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 25,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-100KB-loss-0.1",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-100KB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0.1,
+        "delay": 0,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-100KB-loss-1.0",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-100KB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 1.0,
+        "delay": 0,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-100KB-delay-10",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-100KB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 10,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-100KB-delay-50",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-100KB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-100KB-delay-100",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-100KB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 100,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-100KB-bw-10",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-100KB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 0,
+        "bw": 10,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-100KB-bw-50",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-100KB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 0,
+        "bw": 50,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-100KB-delay-50-jitter-5",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-100KB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 5,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-100KB-delay-50-jitter-10",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-100KB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 10,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-100KB-delay-50-jitter-25",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-100KB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 25,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-1MB-loss-0.1",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-1MB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0.1,
+        "delay": 0,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-1MB-loss-1.0",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-1MB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 1.0,
+        "delay": 0,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-1MB-delay-10",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-1MB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 10,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-1MB-delay-50",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-1MB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-1MB-delay-100",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-1MB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 100,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-1MB-bw-10",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-1MB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 0,
+        "bw": 10,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-1MB-bw-50",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-1MB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 0,
+        "bw": 50,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-1MB-delay-50-jitter-5",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-1MB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 5,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-1MB-delay-50-jitter-10",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-1MB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 10,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-1MB-delay-50-jitter-25",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-1MB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 25,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-5MB-loss-0.1",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0.1,
+        "delay": 0,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-5MB-loss-1.0",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 1.0,
+        "delay": 0,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-5MB-delay-10",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 10,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-5MB-delay-50",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-5MB-delay-100",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 100,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-5MB-bw-10",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 0,
+        "bw": 10,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-5MB-bw-50",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 0,
+        "bw": 50,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-5MB-delay-50-jitter-5",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 5,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-5MB-delay-50-jitter-10",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 10,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "meta-5MB-delay-50-jitter-25",
+      "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 25,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "cloudflare-100KB-loss-0.1",
+      "endpoints": ["https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0.1,
+        "delay": 0,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "cloudflare-100KB-loss-1.0",
+      "endpoints": ["https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 1.0,
+        "delay": 0,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "cloudflare-100KB-delay-10",
+      "endpoints": ["https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 10,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "cloudflare-100KB-delay-50",
+      "endpoints": ["https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "cloudflare-100KB-delay-100",
+      "endpoints": ["https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 100,
+        "bw": 100,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "cloudflare-100KB-bw-10",
+      "endpoints": ["https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 0,
+        "bw": 10,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "cloudflare-100KB-bw-50",
+      "endpoints": ["https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 0,
+        "bw": 50,
+        "jitter": 0,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "cloudflare-100KB-delay-50-jitter-5",
+      "endpoints": ["https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 5,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "cloudflare-100KB-delay-50-jitter-10",
+      "endpoints": ["https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 10,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    },
+    {
+      "name": "cloudflare-100KB-delay-50-jitter-25",
+      "endpoints": ["https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"],
+      "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
+      "iterations": 3,
+      "interface": "enp0s3",
+      "profile": {
+        "loss": 0,
+        "delay": 50,
+        "bw": 100,
+        "jitter": 25,
+        "burst_ingress": 0,
+        "burst_egress": 0
+      }
+    }
+  ],
+  "analysis": {},
+  "output-dir": "./results"
+}

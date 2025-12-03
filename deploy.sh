@@ -38,23 +38,23 @@ echo ""
 echo "Creating directories..."
 mkdir -p results data
 
-# Check for params.json
-if [ ! -f "params.json" ]; then
-    echo "Warning: params.json not found. Using default configuration."
+# Check for params_docker.json
+if [ ! -f "params_docker.json" ]; then
+    echo "Warning: params_docker.json not found. Using default configuration."
 fi
 
 # Detect network interface
 DETECTED_INTERFACE=$(ip route | grep default | awk '{print $5}' | head -n1)
 echo ""
 echo "Detected network interface: $DETECTED_INTERFACE"
-echo "Make sure to update params.json if this is incorrect."
+echo "Make sure to update params_docker.json if this is incorrect."
 
 echo ""
 echo "=== Deployment Complete ==="
 echo ""
 echo "To run the measurement tool:"
 echo "  docker run --privileged --network host \\"
-echo "    -v \$(pwd)/params.json:/app/params.json:ro \\"
+echo "    -v \$(pwd)/params_docker.json:/app/params_docker.json:ro \\"
 echo "    -v \$(pwd)/results:/app/results \\"
 echo "    -v \$(pwd)/data:/app/data \\"
 echo "    $IMAGE_NAME"

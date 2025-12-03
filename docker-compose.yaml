@@ -13,7 +13,7 @@ services:
       - NET_RAW
     privileged: true
     volumes:
-      - ./params.json:/app/params.json:ro
+      - ./params_docker.json:/app/params_docker.json:ro
       - ./results:/app/results
       - ./data:/app/data
       - /lib/modules:/lib/modules:ro

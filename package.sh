@@ -19,8 +19,8 @@ echo "Copying deployment files..."
 cp deploy.sh "$PACKAGE_DIR/"
 cp docker-compose.yml "$PACKAGE_DIR/" 2>/dev/null || echo "No docker-compose.yml found (optional)"
 
-# Create sample params.json
-cat > "$PACKAGE_DIR/params.json" << 'EOF'
+# Create sample params_docker.json
+cat > "$PACKAGE_DIR/params_docker.json" << 'EOF'
 {
   "network_interface": "eth0",
   "clients": ["ngtcp2_h3", "proxygen_h3", "curl_h2"],
@@ -68,14 +68,14 @@ DEPLOYMENT STEPS:
 2. Run the deployment script:
    ./deploy.sh
 
-3. Edit params.json to configure your experiments:
+3. Edit params_docker.json to configure your experiments:
    - Update "interface" to match your network interface (eth0, ens3, etc.)
    - Add/modify endpoints
    - Configure network profiles
 
 4. Run measurements:
    docker run --privileged --network host \
-     -v $(pwd)/params.json:/app/params.json:ro \
+     -v $(pwd)/params_docker.json:/app/params_docker.json:ro \
      -v $(pwd)/results:/app/results \
      -v $(pwd)/data:/app/data \
      network-measurement-tool:latest
