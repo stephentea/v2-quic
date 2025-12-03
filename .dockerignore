@@ -21,3 +21,7 @@ Dockerfile
 docker-compose.yml
 copy_executables.sh
 check_libs.sh
+package.sh
+deploy.sh
+test_docker.sh
+check_files.sh
