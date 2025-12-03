@@ -69,4 +69,4 @@ ENV PYTHONUNBUFFERED=1
 ENV SSLKEYLOGFILE=/app/data/tmp/sslkeylog
 
 # Default command
-CMD ["python3", "main.py"]
+CMD ["python3", "run_periodic.py"]
