@@ -12,18 +12,19 @@ import pathlib
 import subprocess
 import shutil
 from urllib.parse import urlparse
-from typing import Optional, List, Dict, NamedTuple
-
-"""Network trace"""
-class NetworkTrace(NamedTuple):
-    name: str     # endpoint/client name
-    is_h3: bool   # true iff client is H3
+from typing import Optional, List, Dict, NamedTuple 
 
 # Import other modules
 import sys
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent.absolute()))
-from pipeline.parse_params import Client, Experiment
+from pipeline.parse_params import Client, Experiment, LogType
 from network.generate_cmds import generate_cmds
+
+"""Network trace"""
+class NetworkTrace(NamedTuple):
+    name: str        # endpoint/client name
+    is_h3: bool      # true iff trace is H3
+    logtype: LogType # type of log (pcap/qlog/sqlog/netlog)
 
 # Directories
 ROOT_DIR = pathlib.Path(__file__).parent.parent.absolute()
@@ -148,10 +149,7 @@ def build_client_command(client: Client, url: str, qlog_dir: Optional[pathlib.Pa
     
     exec_path = client.exec_path
     
-    if client.name == 'curl_h2':
-        return ['curl', '-o', '/dev/null', '-s', '--http2', url]
-    
-    elif client.is_h3:
+    if client.is_h3:
         # For H3 clients, add qlog directory parameter
         cmd = [exec_path]
         
@@ -178,12 +176,42 @@ def build_client_command(client: Client, url: str, qlog_dir: Optional[pathlib.Pa
             ])
             if qlog_dir:
                 cmd.append(f'--qlog-dir={qlog_dir}')
+
+        elif 'chrome' in client.name.lower():
+            cmd.extend([
+                '--user-data-dir=/tmp/chrome-profile',
+                '--enable-quic',
+                '--headless',
+                '--dump-dom',
+                '-screenshot=/tmp/output.png',
+                f'--origin-to-force-quic-on={url_host}:{url_port}',
+                url
+            ])
+            if qlog_dir:
+                netlog_path = qlog_dir / 'chrome_h3.json'
+                cmd.append(f'--log-net-log={netlog_path}')
         
         return cmd
     
     else:
-        # Other H2 clients
-        return [exec_path, url]
+        if client.name == 'curl_h2':
+            return ['curl', '-o', '/dev/null', '-s', '--http2', url]
+
+        elif 'chrome' in client.name.lower():
+            cmd = [exec_path]
+            cmd.extend([
+                '--user-data-dir=/tmp/chrome-profile-h2',
+                '--disable-quic',
+                '--headless',
+                '--dump-dom',
+                '-screenshot=/tmp/output.png',
+                url
+            ])
+            if qlog_dir:
+                netlog_path = qlog_dir / 'chrome_h2.json'
+                cmd.append(f'--log-net-log={netlog_path}')
+
+        return cmd 
 
 
 def run_iteration(client: Client, url: str, iteration: int, 
@@ -197,8 +225,8 @@ def run_iteration(client: Client, url: str, iteration: int,
     pcap_process = None
     
     try:
-        # For H2 clients, start packet capture
-        if not client.is_h3:
+        # Start packet capture for curl only
+        if client.uses_pcap:
             remove_files(TMP_PCAP)
             pcap_process = record_pcap(url_host, interface=interface)
         else:
@@ -206,7 +234,7 @@ def run_iteration(client: Client, url: str, iteration: int,
             remove_files(TMP_QLOG)
         
         # Build and run client command
-        cmd = build_client_command(client, url, TMP_QLOG if client.is_h3 else None)
+        cmd = build_client_command(client, url, TMP_QLOG if not client.uses_pcap else None)
         print(cmd)
         start_time = time.time()
         result = subprocess.run(
@@ -218,7 +246,7 @@ def run_iteration(client: Client, url: str, iteration: int,
         duration = end_time - start_time
         print(f"    Client ran for {duration:.2f} seconds")
 
-        # Stop packet capture for H2
+        # Stop packet capture if started
         if pcap_process:
             time.sleep(PCAP_STOP_DELAY)
             pcap_process.terminate()
@@ -229,7 +257,7 @@ def run_iteration(client: Client, url: str, iteration: int,
                 pcap_process.wait()
         
         # Save results
-        if not client.is_h3:
+        if client.uses_pcap:
             # Parse and save pcap as JSON (preserving duplicate keys for analyze_pcap)
             if pcap_output_dir:
                 output_file = parse_pcap_to_json(client.name, iteration, pcap_output_dir)
@@ -239,12 +267,15 @@ def run_iteration(client: Client, url: str, iteration: int,
                     raise Exception(f'Output file {output_file} was not created')
                 if output_file.stat().st_size == 0:
                     raise Exception(f'Output file {output_file} is empty')
+
         else:
-            # Move qlog to output directory
+            # Move qlog/sqlog/netlog file to output directory
             if client.name == "ngtcp2_h3":
                 qlog_files = list(TMP_QLOG.glob('*.sqlog'))
             elif client.name == "proxygen_h3":
                 qlog_files = list(TMP_QLOG.glob('*.qlog'))
+            elif "chrome" in client.name:
+                qlog_files = list(TMP_QLOG.glob('*.json'))
             if not qlog_files:
                 raise Exception('No qlog file created')
             
@@ -255,9 +286,11 @@ def run_iteration(client: Client, url: str, iteration: int,
                     output_file = qlog_output_dir / f'{client.name}_{iteration}.sqlog'
                 elif client.name == "proxygen_h3":
                     output_file = qlog_output_dir / f'{client.name}_{iteration}.qlog'
+                elif "chrome" in client.name:
+                    output_file = qlog_output_dir / f'{client.name}_{iteration}.json'
                 shutil.move(str(qlog_file), str(output_file))
             
-            remove_files(TMP_QLOG)
+            # remove_files(TMP_QLOG)
         
         # Clean up SSL key log
         if SSL_KEY_LOG_FILE.exists():
@@ -312,7 +345,8 @@ def run_experiment(experiment: Experiment, client_dict: dict[str, Client]) -> Di
             client = client_dict[client_name]
             trace = NetworkTrace(
                 name=client_name,
-                is_h3=client.is_h3
+                is_h3=client.is_h3,
+                logtype=client.logtype
             )
             output_files[trace] = []
             print(f'\n--- Running client: {client_name} ---')
@@ -337,8 +371,8 @@ def run_experiment(experiment: Experiment, client_dict: dict[str, Client]) -> Di
                             client, 
                             endpoint,
                             i,
-                            qlog_output_dir=client_output_dir if client.is_h3 else None,
-                            pcap_output_dir=client_output_dir if not client.is_h3 else None,
+                            qlog_output_dir=client_output_dir if not client.uses_pcap else None,
+                            pcap_output_dir=client_output_dir if client.uses_pcap else None,
                             interface=experiment.interface
                         )
                         output_files[trace].append(output_file)
@@ -371,7 +405,8 @@ def run_experiment(experiment: Experiment, client_dict: dict[str, Client]) -> Di
 
             trace = NetworkTrace(
                 name=endpoint_name,
-                is_h3=client.is_h3
+                is_h3=client.is_h3,
+                logtype=client.logtype
             )
             output_files[trace] = []
             

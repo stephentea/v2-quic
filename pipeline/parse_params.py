@@ -6,12 +6,21 @@ parse-params.py - Parse network experiment configuration file
 import json
 import sys
 from typing import Dict, List, NamedTuple, Optional
+from enum import Enum
+
+class LogType(Enum):
+    PCAP = 0
+    QLOG = 1
+    SQLOG = 2
+    NETLOG = 3
 
 """Client configuration"""
 class Client(NamedTuple): 
     name: str        # client name
     exec_path: str   # exec path
     is_h3: bool      # true iff client is H3
+    logtype: LogType # file type of log file
+    uses_pcap: bool  # true iff client uses PCAP for logs
 
 """Network profile for tc"""
 class NetworkProfile(NamedTuple):
@@ -56,11 +65,22 @@ def parse_params(json_file: str) -> tuple[Dict[str, Client], Dict[str, Experimen
     for client_name in client_names:
         exec_path = client_exec_paths.get(client_name, '')
         is_h3 = 'h3' in client_name.lower()
+        match client_name:
+            case "curl_h2":     logtype = LogType.PCAP
+            case "chrome_h2":   logtype = LogType.NETLOG
+            case "chrome_h3":   logtype = LogType.NETLOG
+            case "ngtcp2_h3":   logtype = LogType.SQLOG
+            case "proxygen_h3": logtype = LogType.QLOG
+            case _: assert(0) 
+        
+        uses_pcap: bool = (logtype == LogType.PCAP)
         
         client_dict[client_name] = Client(
             name=client_name,
             exec_path=exec_path,
-            is_h3=is_h3
+            is_h3=is_h3,
+            logtype=logtype,
+            uses_pcap=uses_pcap
         )
     
     # Parse experiments

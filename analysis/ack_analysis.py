@@ -399,3 +399,113 @@ def analyze_qlog(filename: str) -> tuple[dict, str]:
         'lost_packets': lost_packets,
         'ttlb': ttlb
     }
+
+def analyze_netlog(filename: str) -> tuple[dict, str]:
+    ack_ts = {}
+    rx_ts = {}
+    ack_packets_ts = []
+    rx_packets_ts = []
+    lost_packets = []
+    time_to_detection = {}
+    detections = []
+    packets = {}
+    first_client_packet_time = None
+    last_server_packet_time = None
+
+    with open(filename) as f:
+        data = json.load(f)
+
+        constants = data['constants']
+        events = data['events']
+        
+        # Create reverse mappings from integer codes to string names
+        event_types = {v: k for k, v in constants['logEventTypes'].items()}
+        source_types = {v: k for k, v in constants['logSourceType'].items()}
+        phases = {v: k for k, v in constants['logEventPhase'].items()}
+
+        start_time = None
+        total_size = 0
+        prev_pn = 0
+        max_offset = 0  # Track maximum offset seen for QUIC
+
+        for event in events:
+            # Convert integer codes to strings
+            source_type = source_types[event['source']['type']]
+            source_id = event['source']['id']
+            event_type = event_types[event['type']]
+            phase = phases[event['phase']]
+
+            if 'params' not in event:
+                continue
+
+            params = event['params']
+            event_time = int(event['time'])
+
+            if start_time is not None:
+                ts = event_time - start_time
+
+            if (event_type == 'TCP_CONNECT' or event_type == 'QUIC_SESSION') and phase == 'PHASE_BEGIN':
+                if start_time is None:
+                    start_time = event_time
+                    first_client_packet_time = 0
+
+            if event_type == 'HTTP2_SESSION_RECV_DATA':
+                total_size += params['size']
+                ack_ts[ts] = total_size / 1024
+                rx_ts[ts] = total_size / 1024
+                rx_packets_ts.append((ts, {'length': params['size'] / 1024}))
+                ack_packets_ts.append((ts, total_size / 1024))
+                last_server_packet_time = ts
+
+            if event_type == 'QUIC_SESSION_UNAUTHENTICATED_PACKET_HEADER_RECEIVED':
+                if params.get('header_format') != 'IETF_QUIC_SHORT_HEADER_PACKET':
+                    continue
+                pn = params['packet_number']
+
+                if pn > prev_pn:
+                    prev_pn = pn
+
+            if event_type == 'QUIC_SESSION_STREAM_FRAME_RECEIVED':
+                if params['stream_id'] != 0:
+                    continue
+
+                offset = params['offset']
+                length = params['length']
+                end_offset = offset + length
+
+                packets[prev_pn] = end_offset / 1024
+
+                # Only track if this frame extends beyond what we've seen
+                if end_offset > max_offset:
+                    # Check for gaps (potential packet loss)
+                    if offset > max_offset:
+                        lost_packets.append((ts, end_offset / 1024))
+                        time_to_detection[max_offset] = ts
+                    
+                    max_offset = end_offset
+                    
+                    rx_ts[ts] = max_offset / 1024
+                    ack_ts[ts] = max_offset / 1024
+                    rx_packets_ts.append((ts, {'length': length / 1024}))
+                    ack_packets_ts.append((ts, max_offset / 1024))
+                    last_server_packet_time = ts
+
+    # Calculate TTLB
+    ttlb = None
+    if len(ack_packets_ts) > 0:
+        ttlb = ack_packets_ts[-1][0] - ack_packets_ts[0][0]
+
+    # Delete file after analysis to prevent excessive disk usage
+    # try:
+    #     pathlib.Path(filename).unlink()
+    # except Exception as e:
+    #     print(f"Warning: Failed to delete {filename}: {e}")
+
+    return {
+        'ack_ts': ack_ts,
+        'ack_packets_ts': ack_packets_ts,
+        'rx_ts': rx_ts,
+        'rx_packets_ts': rx_packets_ts,
+        'lost_packets': lost_packets,
+        'ttlb': ttlb
+    }
