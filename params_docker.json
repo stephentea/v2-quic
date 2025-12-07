@@ -19,7 +19,7 @@
       ],
       "clients": ["ngtcp2_h3"],
       "iterations": 3,
-      "interface": "enp0s3",  
+      "interface": "eno1",  
       "profile": {
         "loss": 0,
         "delay": 0,
@@ -37,7 +37,7 @@
       ],
       "clients": ["ngtcp2_h3"],
       "iterations": 3,
-      "interface": "enp0s3",  
+      "interface": "eno1",  
       "profile": {
         "loss": 0,
         "delay": 0,
@@ -55,7 +55,7 @@
       ],
       "clients": ["ngtcp2_h3"],
       "iterations": 3,
-      "interface": "enp0s3",  
+      "interface": "eno1",  
       "profile": {
         "loss": 0,
         "delay": 0,
@@ -70,7 +70,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0.1,
         "delay": 0,
@@ -85,7 +85,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 1.0,
         "delay": 0,
@@ -100,7 +100,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 10,
@@ -115,7 +115,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -130,7 +130,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 100,
@@ -145,7 +145,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 0,
@@ -160,7 +160,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 0,
@@ -175,7 +175,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -190,7 +190,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -205,7 +205,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_android_auto_color_2x_web_512dp.max-600x600.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -220,7 +220,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0.1,
         "delay": 0,
@@ -235,7 +235,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 1.0,
         "delay": 0,
@@ -250,7 +250,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 10,
@@ -265,7 +265,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -280,7 +280,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 100,
@@ -295,7 +295,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 0,
@@ -310,7 +310,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 0,
@@ -325,7 +325,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -340,7 +340,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -355,7 +355,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/logo_accessibility_color_192dp.max-2800x2800.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -370,7 +370,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0.1,
         "delay": 0,
@@ -385,7 +385,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 1.0,
         "delay": 0,
@@ -400,7 +400,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 10,
@@ -415,7 +415,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -430,7 +430,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 100,
@@ -445,7 +445,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 0,
@@ -460,7 +460,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 0,
@@ -475,7 +475,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -490,7 +490,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -505,7 +505,7 @@
       "endpoints": ["https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google-cafe.max-2800x2800.jpg"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -520,7 +520,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-100KB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0.1,
         "delay": 0,
@@ -535,7 +535,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-100KB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 1.0,
         "delay": 0,
@@ -550,7 +550,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-100KB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 10,
@@ -565,7 +565,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-100KB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -580,7 +580,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-100KB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 100,
@@ -595,7 +595,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-100KB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 0,
@@ -610,7 +610,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-100KB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 0,
@@ -625,7 +625,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-100KB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -640,7 +640,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-100KB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -655,7 +655,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-100KB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -670,7 +670,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-1MB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0.1,
         "delay": 0,
@@ -685,7 +685,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-1MB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 1.0,
         "delay": 0,
@@ -700,7 +700,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-1MB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 10,
@@ -715,7 +715,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-1MB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -730,7 +730,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-1MB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 100,
@@ -745,7 +745,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-1MB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 0,
@@ -760,7 +760,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-1MB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 0,
@@ -775,7 +775,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-1MB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -790,7 +790,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-1MB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -805,7 +805,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-1MB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -820,7 +820,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0.1,
         "delay": 0,
@@ -835,7 +835,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 1.0,
         "delay": 0,
@@ -850,7 +850,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 10,
@@ -865,7 +865,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -880,7 +880,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 100,
@@ -895,7 +895,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 0,
@@ -910,7 +910,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 0,
@@ -925,7 +925,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -940,7 +940,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -955,7 +955,7 @@
       "endpoints": ["https://scontent.xx.fbcdn.net/speedtest-5MB"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -970,7 +970,7 @@
       "endpoints": ["https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0.1,
         "delay": 0,
@@ -985,7 +985,7 @@
       "endpoints": ["https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 1.0,
         "delay": 0,
@@ -1000,7 +1000,7 @@
       "endpoints": ["https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 10,
@@ -1015,7 +1015,7 @@
       "endpoints": ["https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -1030,7 +1030,7 @@
       "endpoints": ["https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 100,
@@ -1045,7 +1045,7 @@
       "endpoints": ["https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 0,
@@ -1060,7 +1060,7 @@
       "endpoints": ["https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 0,
@@ -1075,7 +1075,7 @@
       "endpoints": ["https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -1090,7 +1090,7 @@
       "endpoints": ["https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,
@@ -1105,7 +1105,7 @@
       "endpoints": ["https://www.cloudflare.com/resources/images/slt3lc6tev37/4jZWUf5vPGcuekUAkugiGm/750cf9fc220ff5007d3f703ddd38d3c0/quic-hero.png"],
       "clients": ["proxygen_h3", "ngtcp2_h3", "curl_h2"],
       "iterations": 3,
-      "interface": "enp0s3",
+      "interface": "eno1",
       "profile": {
         "loss": 0,
         "delay": 50,

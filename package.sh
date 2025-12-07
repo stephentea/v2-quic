@@ -20,7 +20,13 @@ cp deploy.sh "$PACKAGE_DIR/"
 cp docker-compose.yml "$PACKAGE_DIR/" 2>/dev/null || echo "No docker-compose.yml found (optional)"
 
 # Create sample params_docker.json
-cat > "$PACKAGE_DIR/params_docker.json" << 'EOF'
+# Copy params_docker.json if it exists, otherwise create sample
+if [ -f "params_docker.json" ]; then
+    echo "Copying existing params_docker.json..."
+    cp params_docker.json "$PACKAGE_DIR/"
+else
+    echo "Creating sample params_docker.json..."
+    cat > "$PACKAGE_DIR/params_docker.json" << 'EOF'
 {
   "network_interface": "eth0",
   "clients": ["ngtcp2_h3", "proxygen_h3", "curl_h2"],
@@ -50,6 +56,7 @@ cat > "$PACKAGE_DIR/params_docker.json" << 'EOF'
   "output-dir": "./results"
 }
 EOF
+fi
 
 # Create README for deployment
 cat > "$PACKAGE_DIR/README.txt" << 'EOF'

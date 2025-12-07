@@ -233,6 +233,12 @@ def run_iteration(client: Client, url: str, iteration: int,
             # Parse and save pcap as JSON (preserving duplicate keys for analyze_pcap)
             if pcap_output_dir:
                 output_file = parse_pcap_to_json(client.name, iteration, pcap_output_dir)
+
+                # Verify the pcap file was created and has content
+                if not output_file.exists():
+                    raise Exception(f'Output file {output_file} was not created')
+                if output_file.stat().st_size == 0:
+                    raise Exception(f'Output file {output_file} is empty')
         else:
             # Move qlog to output directory
             if client.name == "ngtcp2_h3":

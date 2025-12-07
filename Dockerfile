@@ -56,6 +56,7 @@ COPY clients/ /app/clients/
 COPY network/ /app/network/
 COPY analysis/ /app/analysis/
 COPY main.py /app/
+COPY run_periodic.py /app/
 
 RUN mkdir -p /app/data/tmp/qlog /app/data/tmp/pcap /app/data/qlogs /app/data/pcaps && \
     mkdir -p /tmp/logs && \

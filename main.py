@@ -19,7 +19,7 @@ from analysis.segment_analysis import Segment, segment_analysis, find_first_sign
 def main():
     os.makedirs('results', exist_ok=True)
     # Run each experiment 
-    (clients, experiments) = parse_params('params_local.json')
+    (clients, experiments) = parse_params('params_docker.json')
     for experiment in experiments.values():
         output_files = run_experiment(experiment, clients)
         analysis: Dict[NetworkTrace, Dict] = {}                   # NetworkTrace -> Analysis Results
